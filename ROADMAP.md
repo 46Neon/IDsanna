@@ -47,7 +47,32 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
-## Investigación comunitaria y de producto
+## Administrador de capacidades y aplicaciones
+
+Al abrir la app, IDsanna tendrá un panel de diagnóstico que analiza las capacidades observables del dispositivo y de las aplicaciones visibles para el sistema. No declarará que una app es controlable solo por estar instalada: comprobará package/versión, intents, accesibilidad disponible, UI semántica cuando se pruebe, overlay, MediaProjection, permisos y adaptador específico.
+
+Cada aplicación tendrá un perfil:
+
+- `detectada`: aparece en el inventario permitido por Android.
+- `launchable`: puede abrirse mediante Intent.
+- `accessibility_candidate`: puede exponer nodos, pendiente de prueba.
+- `tested`: una acción concreta fue probada y verificada.
+- `partial`: solo algunas acciones funcionan.
+- `blocked`: permisos, UI, seguridad, OEM o política impiden el control.
+- `unknown`: todavía no se ha probado.
+
+El usuario podrá habilitar o deshabilitar capacidades por aplicación y por acción:
+
+```text
+Chrome: abrir ✓, leer ✓, escribir ✓, publicar !
+WhatsApp: abrir ✓, leer ?, escribir ?, enviar !
+AutoCAD: abrir ✓, editar ?, guardar !
+```
+
+La burbuja será la interfaz rápida para pedir ayuda; el panel principal será el administrador auditable para permisos, adaptadores, riesgos, aprobaciones, logs y pruebas. “Administrador” significa panel de control de IDsanna; no se prometerá Device Owner ni privilegios administrativos del sistema. DevicePolicyManager/Device Owner solo se evaluará en dispositivos gestionados y con enrolamiento explícito.
+
+Android 11 limita la visibilidad de paquetes, por lo que el inventario respetará Package Visibility y no asumirá acceso a una lista universal. La app solicitará solo la visibilidad y permisos necesarios, mostrará por qué los necesita y permitirá actualizar el diagnóstico.
+
 
 Se investigarán GitHub, documentación oficial, Stack Overflow, Hacker News, Indie Hackers, Product Hunt y publicaciones públicas de X como fuentes complementarias. Cada fuente tendrá un peso distinto: código/issues/documentación para evidencia técnica; Stack Overflow para soluciones puntuales; HN para debates y experiencias; Product Hunt/Indie Hackers/X para necesidades, validación y señales de producto, nunca como prueba de compatibilidad Android.
 
