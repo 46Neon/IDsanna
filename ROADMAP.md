@@ -47,7 +47,26 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
-## Cómo se convierte una instrucción en una acción
+## Motor de instrucciones de IDsanna
+
+IDsanna tendrá un compilador de intención, no un compilador de lenguaje general. Sus piezas serán:
+
+- Lexer/tokenizador: separa texto, entidades, parámetros, aplicaciones, fechas y unidades.
+- Parser: convierte tokens en una intención estructurada y rechaza formatos ambiguos.
+- Tabla de símbolos/capacidades: registra agentes, Nodes, apps, permisos, herramientas, variables y resultados.
+- Validador semántico: comprueba que la acción tenga sentido y que los parámetros sean válidos.
+- Planificador: crea un grafo de pasos con dependencias, timeouts, reintentos y checkpoints.
+- Compilador de herramientas: traduce cada paso a una llamada tipada, nunca a shell libre.
+- Policy/approval engine: aplica riesgo, permisos y confirmaciones.
+- Runtime/executor: ejecuta adaptadores Android, web, PC, Termux, red o CAD.
+- Observador/verificador: renueva el estado y prueba el resultado real.
+- Estado persistente: conserva tareas, logs redactados, errores y reanudación.
+- Loader/registry: carga plugins y adaptadores firmados o permitidos, con versión y compatibilidad.
+- Configuración YAML/JSON: describe capacidades, políticas, agentes y entornos; nunca almacena secretos.
+- Núcleo: contratos, tipos, eventos, seguridad, scheduler y almacenamiento común.
+
+El recolector de basura no se implementará desde cero: Android usará ART/JVM/Kotlin, y cada runtime externo usará su propio GC. IDsanna controlará memoria mediante límites, cancelación, timeouts y limpieza de procesos. Los binarios nativos solo se incluirán cuando exista una necesidad comprobada, arquitectura compatible y revisión de licencia; no se ejecutarán binarios desconocidos recibidos del modelo.
+
 
 El modelo LLM no ejecutará directamente comandos ni gestos. IDsanna usará un compilador de intención:
 
