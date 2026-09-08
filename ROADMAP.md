@@ -47,6 +47,23 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
+## Resultados de investigación Android 11
+
+La comparación de proyectos y issues de Android confirma que no existe un canal universal de control. IDsanna deberá medir capacidades reales antes de cada tarea: versión/OEM, AccessibilityService, Usage Access, overlay, batería, MediaProjection, root/Shizuku y conectividad.
+
+Patrones incorporados:
+
+- AccessibilityService debe distinguir eventos, lectura de nodos, gestos, texto y acciones globales; tener UsageStats como fallback parcial.
+- Android 11 puede mostrar diálogos de permisos que bloquean Appium; se requiere estado `waiting_permission` e intervención humana.
+- El almacenamiento debe priorizar scoped storage, SAF, MediaStore y espacio privado; no se prometerá acceso arbitrario a `Android/data`.
+- OEMs pueden matar servicios o revocar comportamiento tras reinicio/idle; habrá foreground service, diagnóstico de salida, revalidación al abrir y guía por OEM.
+- MediaProjection requiere consentimiento, manifest y foreground service correcto; `FLAG_SECURE` no se resolverá en stock Android sin cooperación del objetivo o entorno modificado.
+- CAPTCHA, 2FA y logins serán checkpoints humanos, nunca objetivos de bypass automático.
+- Emulador verde no basta: se combinarán pruebas Android 11, dispositivo físico y matriz OEM; Firebase Test Lab o dispositivo propio se usarán cuando estén disponibles.
+- Los adaptadores serán por aplicación/versión y declararán selectores, permisos, límites, fallos conocidos, criterios de parada y verificación.
+
+Referencias comparadas: Appium UiAutomator2, Maestro, Appium Espresso, SD Maid SE, Flint, Termux, RustDesk, Firebase Test Lab Action y los issues de Android 11/MediaProjection/CAPTCHA enlazados en la investigación. Estos proyectos se usarán como evidencia y patrón, no como garantía de control universal.
+
 ## Auditoría de bloqueos antes del Runtime
 
 CI de `main` está pasando; no hay un error de compilación que impida avanzar. Sí existen límites funcionales que deben resolverse antes de ejecutar herramientas reales:
