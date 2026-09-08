@@ -17,6 +17,10 @@ class ToolRegistry {
         fun defaults(): ToolRegistry = ToolRegistry().apply {
             register(ToolDefinition("android.open_app", "android", Risk.LOW, requiresConfirmation = false, inputFields = setOf("package")))
             register(ToolDefinition("android.capture_screen", "android", Risk.MEDIUM, requiresConfirmation = false))
+            register(ToolDefinition("android.click", "android", Risk.MEDIUM, requiresConfirmation = false, inputFields = setOf("text")))
+            register(ToolDefinition("android.type_text", "android", Risk.MEDIUM, requiresConfirmation = true, inputFields = setOf("text")))
+            register(ToolDefinition("android.swipe", "android", Risk.MEDIUM, requiresConfirmation = false, inputFields = setOf("x1", "y1", "x2", "y2")))
+            register(ToolDefinition("android.global_back", "android", Risk.MEDIUM, requiresConfirmation = false))
             register(ToolDefinition("browser.navigate", "browser", Risk.MEDIUM, requiresConfirmation = true, inputFields = setOf("url")))
             register(ToolDefinition("termux.run_registered_task", "termux", Risk.HIGH, requiresConfirmation = true, inputFields = setOf("task")))
             register(ToolDefinition("network.get_local_ip", "network", Risk.LOW, requiresConfirmation = false))
