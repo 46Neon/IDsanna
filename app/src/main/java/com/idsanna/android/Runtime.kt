@@ -21,7 +21,8 @@ data class ToolExecutionRequest(
     val operationId: String,
     val toolName: String,
     val arguments: Map<String, String> = emptyMap(),
-    val permissions: Set<String> = emptySet()
+    val permissions: Set<String> = emptySet(),
+    val verification: VerificationSpec? = null
 )
 
 data class ToolExecutionResult(val operationId: String, val status: ExecutionStatus, val evidence: String)
