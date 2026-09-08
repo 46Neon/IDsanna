@@ -7,8 +7,10 @@ IDsanna se construirá por bloques verificables. Android 11 será el primer disp
 ## Bloques
 
 1. Base Android y APK.
-2. Voz y sesión temporal.
+2. Texto flotante y sesión de instrucciones.
 3. Pruebas de capacidades Android 11.
+
+La voz queda aplazada como módulo opcional. La primera interfaz operativa será texto flotante; no se dependerá de un motor de reconocimiento de voz del dispositivo.
 4. Burbuja y control visible.
 5. Control autorizado mediante APIs, intents y accesibilidad.
 6. Sistema, procesos, almacenamiento y permisos.
