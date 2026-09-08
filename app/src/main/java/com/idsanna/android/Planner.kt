@@ -7,6 +7,7 @@ class Planner(private val tools: ToolRegistry) {
             "open" to "android" -> "android.open_app"
             "open" to "browser" -> "browser.navigate"
             "inspect" to "network" -> "network.get_local_ip"
+            "inspect" to "browser" -> "browser.observe"
             "create" to "autocad" -> "cad.create_geometry"
             "execute" to "termux" -> "termux.run_registered_task"
             else -> null

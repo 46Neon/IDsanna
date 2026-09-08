@@ -1,13 +1,13 @@
 package com.idsanna.android
 
-/** Routes only the typed browser operation; it never exposes raw WebView scripting. */
+/** Routes typed browser operations; raw WebView scripting is never exposed. */
 class BrowserToolRouter(
     private val tools: ToolRegistry,
     private val policy: PolicyEngine,
     private val browser: BrowserWebViewController
 ) {
     fun route(request: ToolExecutionRequest): ToolExecutionResult {
-        if (request.toolName != "browser.navigate") {
+        if (request.toolName !in setOf("browser.navigate", "browser.observe")) {
             return ToolExecutionResult(request.operationId, ExecutionStatus.DENIED, "unsupported_browser_tool")
         }
         if (!tools.isRegistered(request.toolName)) {
@@ -20,14 +20,23 @@ class BrowserToolRouter(
         if (decision.action == PolicyAction.REQUIRE_CONFIRMATION) {
             return ToolExecutionResult(request.operationId, ExecutionStatus.WAITING_CONFIRMATION, decision.reason)
         }
-        val url = request.arguments["url"]
-            ?: return ToolExecutionResult(request.operationId, ExecutionStatus.FAILED, "missing_url")
-        val result = browser.navigate(url)
-        return if (result.accepted) {
-            // Navigation was requested, not verified. A later observation must complete it.
-            ToolExecutionResult(request.operationId, ExecutionStatus.SIMULATED, result.evidence)
-        } else {
-            ToolExecutionResult(request.operationId, ExecutionStatus.DENIED, result.evidence)
+
+        return when (request.toolName) {
+            "browser.navigate" -> {
+                val url = request.arguments["url"]
+                    ?: return ToolExecutionResult(request.operationId, ExecutionStatus.FAILED, "missing_url")
+                val result = browser.navigate(url)
+                if (result.accepted) ToolExecutionResult(request.operationId, ExecutionStatus.SIMULATED, result.evidence)
+                else ToolExecutionResult(request.operationId, ExecutionStatus.DENIED, result.evidence)
+            }
+            else -> {
+                val result = browser.observe()
+                if (result.ready) {
+                    ToolExecutionResult(request.operationId, ExecutionStatus.COMPLETED, "observation_ready:epoch=${result.observation?.pageEpoch}")
+                } else {
+                    ToolExecutionResult(request.operationId, ExecutionStatus.FAILED, result.evidence)
+                }
+            }
         }
     }
 }
