@@ -5,6 +5,7 @@ class Planner(private val tools: ToolRegistry) {
         if (!instruction.valid) return ExecutionPlan(taskId, emptyList(), instruction.errors)
         val toolName = when (instruction.intent to instruction.target) {
             "open" to "android" -> "android.open_app"
+            "open" to "browser" -> "browser.navigate"
             "inspect" to "network" -> "network.get_local_ip"
             "create" to "autocad" -> "cad.create_geometry"
             "execute" to "termux" -> "termux.run_registered_task"

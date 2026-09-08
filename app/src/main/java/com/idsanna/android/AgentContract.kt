@@ -45,6 +45,7 @@ class AgentContract(
     private fun missingParameters(parsed: ParsedInstruction): List<String> = when {
         "missing_dimensions" in parsed.errors -> listOf("dimensions")
         parsed.intent == "open" && parsed.target == "android" -> listOf("package")
+        parsed.intent == "open" && parsed.target == "browser" && !parsed.parameters.containsKey("url") -> listOf("url")
         parsed.intent == "execute" && parsed.target == "termux" -> listOf("registered_task")
         else -> emptyList()
     }
