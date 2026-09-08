@@ -18,8 +18,9 @@ class IdsannaService : Service(), RecognitionListener, TextToSpeech.OnInitListen
     companion object { const val ACTION_LISTEN = "com.idsanna.android.LISTEN"; const val ACTION_STOP = "com.idsanna.android.STOP" }
     private var recognizer: SpeechRecognizer? = null
     private var tts: TextToSpeech? = null
+    private lateinit var voiceSession: VoiceSession
 
-    override fun onCreate() { super.onCreate(); createChannel(); tts = TextToSpeech(this, this); startForeground(7, notification("Servicio activo; esperando instrucción")) }
+    override fun onCreate() { super.onCreate(); voiceSession = VoiceSession(this); createChannel(); tts = TextToSpeech(this, this); startForeground(7, notification("Servicio activo; esperando instrucción")) }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) { ACTION_LISTEN -> listenOnce(); ACTION_STOP -> stopSelf() }
         return START_STICKY
@@ -34,7 +35,16 @@ class IdsannaService : Service(), RecognitionListener, TextToSpeech.OnInitListen
         update("Escuchando; di una instrucción"); recognizer?.startListening(request)
     }
     private fun speak(text: String) { tts?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "idsanna-response") }
-    override fun onResults(results: Bundle?) { val text = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.trim().orEmpty(); if (text.isEmpty()) { update("No se entendió la instrucción"); speak("No pude entender la instrucción") } else { update("Instrucción recibida"); speak("Recibí: $text") } }
+    override fun onResults(results: Bundle?) {
+        val text = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.trim().orEmpty()
+        if (text.isEmpty()) { update("No se entendió la instrucción"); speak("No pude entender la instrucción"); return }
+        if (!voiceSession.isActive()) {
+            if (voiceSession.tryActivate(text)) { update("Sesión de voz activa por cinco minutos"); speak("Sesión activada") }
+            else { update("Sesión bloqueada; requiere código"); speak("Di el código de activación para iniciar una sesión") }
+            return
+        }
+        update("Instrucción recibida"); speak("Recibí: $text")
+    }
     override fun onError(error: Int) { update("Escucha finalizada; código $error"); }
     override fun onReadyForSpeech(params: Bundle?) { update("Micrófono listo") }
     override fun onBeginningOfSpeech() { update("Escuchando") }
