@@ -14,6 +14,7 @@ class OperationControl {
 
     fun cancel(operationId: String): Boolean = operations.replace(operationId, OperationState.RUNNING, OperationState.CANCELLED)
     fun complete(operationId: String): Boolean = operations.replace(operationId, OperationState.RUNNING, OperationState.COMPLETED)
+    fun fail(operationId: String): Boolean = operations.replace(operationId, OperationState.RUNNING, OperationState.FAILED)
     fun state(operationId: String): OperationState? = operations[operationId]
     fun isTimedOut(startedAt: Long, timeoutMs: Long, now: Long = System.currentTimeMillis()): Boolean = now - startedAt >= timeoutMs.coerceIn(100L, 300_000L)
 }
