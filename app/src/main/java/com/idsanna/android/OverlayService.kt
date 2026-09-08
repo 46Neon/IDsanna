@@ -55,8 +55,8 @@ class OverlayService : Service() {
     private fun showPanel() {
         if (panel != null) return
         val input = EditText(this).apply { hint = "Escribe una instrucción para IDsanna"; setTextColor(Color.WHITE); setHintTextColor(Color.LTGRAY); setSingleLine(false); minLines = 2 }
-        val taskStatus = TextView(this).apply { setTextColor(Color.WHITE); textSize = 14f; setPadding(0, 10, 0, 10); text = TaskStore(this@OverlayService).latest()?.let { "Última tarea: ${it.id}\nEstado: ${it.status}\n${it.instruction}" } ?: "No hay tareas todavía" }
-        val send = Button(this).apply { text = "Enviar"; setOnClickListener { val command = input.text.toString().trim(); if (command.isNotEmpty()) { val task = TaskStore(this@OverlayService).enqueue(command); val parsed = InstructionParser().parse(command); taskStatus.text = "Tarea creada\nID: ${task}\nEstado: queued\nIntención: ${parsed.intent}\nDestino: ${parsed.target}\nInstrucción guardada: $command"; Toast.makeText(this@OverlayService, "Tarea guardada", Toast.LENGTH_SHORT).show(); input.text.clear() } } }
+        val taskStatus = TextView(this).apply { setTextColor(Color.WHITE); textSize = 14f; setPadding(0, 10, 0, 10); text = TaskStore(this@OverlayService).latest()?.let { taskCard(it) } ?: "No hay tareas todavía" }
+        val send = Button(this).apply { text = "Enviar"; setOnClickListener { val command = input.text.toString().trim(); if (command.isNotEmpty()) { val task = TaskStore(this@OverlayService).enqueue(command); val parsed = InstructionParser().parse(command); taskStatus.text = "Tarea creada\nID: ${task}\nEstado: creada\nIntención: ${parsed.intent}\nDestino: ${parsed.target}\nEjecución: aún no iniciada\nVerificación: pendiente\n\nInstrucción guardada:\n$command"; Toast.makeText(this@OverlayService, "Tarea guardada", Toast.LENGTH_SHORT).show(); input.text.clear() } } }
         val close = Button(this).apply { text = "Cerrar"; setOnClickListener { hidePanel() } }
         panel = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(18, 14, 18, 14); setBackgroundColor(Color.rgb(35, 35, 42)); addView(TextView(this@OverlayService).apply { text = "IDsanna · instrucción"; setTextColor(Color.WHITE); textSize = 16f }); addView(taskStatus); addView(input); addView(send); addView(close) }
         input.isFocusableInTouchMode = true
@@ -64,6 +64,20 @@ class OverlayService : Service() {
         windowManager.addView(panel, p)
         input.requestFocus()
         input.post { (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(input, InputMethodManager.SHOW_IMPLICIT) }
+    }
+
+    private fun taskCard(task: TaskStore.Task): String = "Tarea registrada\nID: ${task.id}\nEstado: ${statusLabel(task.status)}\nEjecución: no iniciada\nVerificación: pendiente\n\n${task.instruction}"
+
+    private fun statusLabel(status: String): String = when (status) {
+        "queued" -> "creada"
+        "planned" -> "planificada"
+        "approval_required" -> "aprobación requerida"
+        "running" -> "ejecución iniciada"
+        "completed" -> "ejecutada"
+        "verified" -> "verificada"
+        "failed" -> "fallida"
+        "cancelled" -> "cancelada"
+        else -> status
     }
 
     private fun hidePanel() { panel?.let { windowManager.removeView(it) }; panel = null }
