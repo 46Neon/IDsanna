@@ -89,7 +89,9 @@ Cada acción tendrá objetivo, dispositivo, aplicación, parámetros, permisos r
 
 ## Estrategia de construcción y pruebas
 
-Durante la fase de construcción no se generará una APK descargable por cada cambio. Cada bloque deberá pasar compilación, análisis estático y pruebas automatizadas en CI; los cambios se organizarán en ramas y Pull Requests. La APK se generará como candidata integrada después de completar los bloques definidos, y entonces se realizará una campaña de pruebas en el dispositivo Android 11. Si una prueba falla, se abrirá una rama de corrección y se regenerará una única APK candidata corregida.
+Durante la fase de construcción no se generará una APK descargable por cada cambio. Cada bloque deberá pasar compilación, análisis estático y pruebas automatizadas en CI; los cambios se organizarán en ramas y Pull Requests. La APK se generará como candidata integrada después de completar los bloques definidos, y entonces se realizará una campaña de pruebas en el dispositivo Android 11.
+
+La validación técnica incluirá GitHub Codespaces/CI para compilación, lint, pruebas unitarias, contratos, parser, políticas y persistencia. La sincronización opcional usará un adaptador remoto para Netlify Blobs y Netlify Database; el dispositivo conservará únicamente una cola/caché mínima para funcionar offline. Netlify no será llamado directamente por el LLM: toda petición pasará por un API autenticada y con políticas. Si una prueba falla, se abrirá una rama de corrección y se regenerará una única APK candidata corregida.
 
 Esto no significa saltar bloques: cada bloque seguirá teniendo implementación, contratos, criterios de aceptación y revisión antes de iniciar el siguiente. Se pospone la prueba manual repetitiva, no la validación técnica del bloque.
 
