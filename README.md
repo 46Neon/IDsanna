@@ -1,6 +1,6 @@
 # IDsanna
 
-Agente multimodal para Android, web, navegador, Termux y automatización supervisada.
+Agente multimodal para Android y automatización supervisada.
 
 ## Objetivo
 
@@ -56,10 +56,11 @@ Esta separación evita presentar una tarea almacenada como si ya hubiera sido ej
 ## Límites actuales
 
 - Guardar una instrucción no ejecuta por sí mismo una acción externa.
-- Un destino reconocido no implica que exista un adaptador funcional para esa aplicación.
-- AutoCAD, navegador, Termux y otras integraciones requieren herramientas, permisos, adaptadores y pruebas específicas.
+- Reconocer un destino no implica que exista un adaptador funcional para esa aplicación.
+- El control de aplicaciones mediante Accessibility requiere permisos, acciones registradas y pruebas específicas.
 - Accessibility no proporciona control universal de Android.
 - Las acciones sensibles requieren aprobación explícita.
+- Puede controlar aplicaciones mediante Accessibility autorizada, siempre dentro de las acciones y capacidades verificadas.
 - No se declaran resultados exitosos sin una postcondición verificable.
 - Login, CAPTCHA, 2FA y protecciones del sistema requieren intervención del usuario.
 - La voz y los servicios remotos todavía no forman parte del flujo principal estable.
