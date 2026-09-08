@@ -39,7 +39,7 @@ class OperationControl(
 
     /** Backward-compatible overload for the original API. */
     fun start(operationId: String, timeoutMs: Long): Boolean =
-        start(operationId = operationId, timeoutMs = timeoutMs)
+        start(operationId = operationId, taskId = null, stepId = null, toolName = null, timeoutMs = timeoutMs)
 
     fun start(
         operationId: String,
