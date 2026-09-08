@@ -47,6 +47,27 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
+## Cómo se convierte una instrucción en una acción
+
+El modelo LLM no ejecutará directamente comandos ni gestos. IDsanna usará un compilador de intención:
+
+```text
+texto del usuario
+→ normalización
+→ intención estructurada
+→ aclaración de datos faltantes
+→ plan de pasos
+→ selección de agente y Node
+→ validación de permisos y riesgo
+→ aprobación humana si corresponde
+→ ejecución mediante una herramienta limitada
+→ observación renovada
+→ verificación del resultado
+→ respuesta y checkpoint
+```
+
+Cada acción tendrá objetivo, dispositivo, aplicación, parámetros, permisos requeridos, riesgo, timeout, reversibilidad y criterio de éxito. Si la pantalla, red, permiso o contexto cambia, se detiene y replantea; no reutiliza referencias antiguas.
+
 ## Restricciones
 
 - Sin root como requisito.
