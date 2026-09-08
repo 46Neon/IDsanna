@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 
 class OverlayService : Service() {
     private lateinit var windowManager: WindowManager
@@ -57,8 +58,11 @@ class OverlayService : Service() {
         val send = Button(this).apply { text = "Enviar"; setOnClickListener { val command = input.text.toString().trim(); if (command.isNotEmpty()) { Toast.makeText(this@OverlayService, "Instrucción recibida", Toast.LENGTH_SHORT).show(); input.text.clear(); } } }
         val close = Button(this).apply { text = "Cerrar"; setOnClickListener { hidePanel() } }
         panel = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(18, 14, 18, 14); setBackgroundColor(Color.rgb(35, 35, 42)); addView(TextView(this@OverlayService).apply { text = "IDsanna · instrucción"; setTextColor(Color.WHITE); textSize = 16f }); addView(input); addView(send); addView(close) }
-        val p = WindowManager.LayoutParams(720, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM, PixelFormat.TRANSLUCENT).apply { gravity = Gravity.TOP or Gravity.START; x = if (bubbleParams!!.x == 0) 8 else resources.displayMetrics.widthPixels - 728; y = bubbleParams!!.y.coerceAtLeast(80) }
+        input.isFocusableInTouchMode = true
+        val p = WindowManager.LayoutParams(720, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, PixelFormat.TRANSLUCENT).apply { gravity = Gravity.TOP or Gravity.START; x = if (bubbleParams!!.x == 0) 8 else resources.displayMetrics.widthPixels - 728; y = bubbleParams!!.y.coerceAtLeast(80); softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE }
         windowManager.addView(panel, p)
+        input.requestFocus()
+        input.post { (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(input, InputMethodManager.SHOW_IMPLICIT) }
     }
 
     private fun hidePanel() { panel?.let { windowManager.removeView(it) }; panel = null }
