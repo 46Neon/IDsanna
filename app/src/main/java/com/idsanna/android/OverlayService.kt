@@ -55,7 +55,7 @@ class OverlayService : Service() {
     private fun showPanel() {
         if (panel != null) return
         val input = EditText(this).apply { hint = "Escribe una instrucción para IDsanna"; setTextColor(Color.WHITE); setHintTextColor(Color.LTGRAY); setSingleLine(false); minLines = 2 }
-        val send = Button(this).apply { text = "Enviar"; setOnClickListener { val command = input.text.toString().trim(); if (command.isNotEmpty()) { Toast.makeText(this@OverlayService, "Instrucción recibida", Toast.LENGTH_SHORT).show(); input.text.clear(); } } }
+        val send = Button(this).apply { text = "Enviar"; setOnClickListener { val command = input.text.toString().trim(); if (command.isNotEmpty()) { val id = TaskStore(this@OverlayService).enqueue(command); Toast.makeText(this@OverlayService, "Tarea en cola: $id", Toast.LENGTH_SHORT).show(); input.text.clear(); } } }
         val close = Button(this).apply { text = "Cerrar"; setOnClickListener { hidePanel() } }
         panel = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(18, 14, 18, 14); setBackgroundColor(Color.rgb(35, 35, 42)); addView(TextView(this@OverlayService).apply { text = "IDsanna · instrucción"; setTextColor(Color.WHITE); textSize = 16f }); addView(input); addView(send); addView(close) }
         input.isFocusableInTouchMode = true
