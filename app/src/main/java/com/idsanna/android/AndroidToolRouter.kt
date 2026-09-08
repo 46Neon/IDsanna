@@ -10,7 +10,8 @@ class AndroidToolRouter(
                 operationId = request.operationId,
                 taskId = request.taskId,
                 stepId = request.stepId,
-                toolName = request.toolName
+                toolName = request.toolName,
+                arguments = request.arguments
             )
         ) {
             return AndroidExecutionResult(request.operationId, false, "duplicate_operation")
