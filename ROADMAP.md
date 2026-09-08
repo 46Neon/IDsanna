@@ -87,6 +87,12 @@ texto del usuario
 
 Cada acción tendrá objetivo, dispositivo, aplicación, parámetros, permisos requeridos, riesgo, timeout, reversibilidad y criterio de éxito. Si la pantalla, red, permiso o contexto cambia, se detiene y replantea; no reutiliza referencias antiguas.
 
+## Estrategia de construcción y pruebas
+
+Durante la fase de construcción no se generará una APK descargable por cada cambio. Cada bloque deberá pasar compilación, análisis estático y pruebas automatizadas en CI; los cambios se organizarán en ramas y Pull Requests. La APK se generará como candidata integrada después de completar los bloques definidos, y entonces se realizará una campaña de pruebas en el dispositivo Android 11. Si una prueba falla, se abrirá una rama de corrección y se regenerará una única APK candidata corregida.
+
+Esto no significa saltar bloques: cada bloque seguirá teniendo implementación, contratos, criterios de aceptación y revisión antes de iniciar el siguiente. Se pospone la prueba manual repetitiva, no la validación técnica del bloque.
+
 ## Restricciones
 
 - Sin root como requisito.
