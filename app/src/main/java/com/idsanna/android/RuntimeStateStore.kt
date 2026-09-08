@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class RuntimeStateStore(context: Context) : RecoveryStatePersistence {
+class RuntimeStateStore(context: Context) : RecoveryStatePersistence, RecoveryStateReader {
     private val db = RuntimeDatabase(context.applicationContext).writableDatabase
 
     override fun saveCheckpoint(checkpoint: Checkpoint) {
@@ -24,6 +24,15 @@ class RuntimeStateStore(context: Context) : RecoveryStatePersistence {
         if (c.moveToFirst()) Checkpoint(c.getString(0), c.getString(1), c.getString(2)) else null
     }
 
+    override fun pendingRecoveryCheckpoints(): List<Checkpoint> = db.rawQuery(
+        "SELECT task_id,next_step_id,status FROM checkpoints WHERE status LIKE 'RECOVERY_%' ORDER BY task_id ASC",
+        null
+    ).use { c ->
+        val result = mutableListOf<Checkpoint>()
+        while (c.moveToNext()) result += Checkpoint(c.getString(0), c.getString(1), c.getString(2))
+        result
+    }
+
     override fun saveApproval(request: ApprovalRequest) {
         val values = ContentValues().apply {
             put("approval_id", "${request.taskId}:${request.toolName}")
@@ -39,6 +48,15 @@ class RuntimeStateStore(context: Context) : RecoveryStatePersistence {
         arrayOf("$taskId:$toolName")
     ).use { c ->
         if (c.moveToFirst()) ApprovalRequest(c.getString(0), c.getString(1), ApprovalState.valueOf(c.getString(2))) else null
+    }
+
+    override fun pendingRecoveryApprovals(): List<ApprovalRequest> = db.rawQuery(
+        "SELECT task_id,tool_name,state FROM approvals WHERE state = ? ORDER BY approval_id ASC",
+        arrayOf(ApprovalState.WAITING.name)
+    ).use { c ->
+        val result = mutableListOf<ApprovalRequest>()
+        while (c.moveToNext()) result += ApprovalRequest(c.getString(0), c.getString(1), ApprovalState.valueOf(c.getString(2)))
+        result
     }
 }
 

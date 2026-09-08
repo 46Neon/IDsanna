@@ -36,12 +36,18 @@ class IdsannaService : Service(), RecognitionListener, TextToSpeech.OnInitListen
 
     private fun recoverPersistedOperations() {
         val results = RecoveryCoordinator(OperationStore(this)).recover()
-        RecoveryStateIntegrator(RuntimeStateStore(this)).apply(results)
-        if (results.isEmpty()) return
+        val runtimeState = RuntimeStateStore(this)
+        RecoveryStateIntegrator(runtimeState).apply(results)
+        val snapshot = RecoveryRuntimeCoordinator(runtimeState).snapshot()
+        if (results.isEmpty() && !snapshot.hasPendingWork) return
 
         val summary = results.groupingBy { it.decision.action }.eachCount()
             .entries.joinToString(", ") { "${it.key.name.lowercase(Locale.ROOT)}=${it.value}" }
-        update("Recuperación revisada: $summary")
+        val pending = listOfNotNull(
+            snapshot.resumeCandidates.takeIf { it.isNotEmpty() }?.let { "reanudar=${it.size}" },
+            snapshot.waitingApprovals.takeIf { it.isNotEmpty() }?.let { "aprobaciones=${it.size}" }
+        ).joinToString(", ")
+        update("Recuperación revisada: $summary${if (pending.isNotEmpty()) "; $pending" else ""}")
     }
 
     private fun createChannel() { getSystemService(NotificationManager::class.java).createNotificationChannel(NotificationChannel("idsanna", "IDsanna", NotificationManager.IMPORTANCE_LOW)) }
