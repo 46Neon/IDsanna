@@ -37,7 +37,7 @@ La voz queda aplazada como módulo opcional. La primera interfaz operativa será
 
 ## Investigación de herramientas
 
-Se mantendrá una matriz separada de herramientas GitHub verificadas. Cada entrada deberá contener URL, función, plataforma, requisitos de root, seguridad, licencia, actividad, compatibilidad Android 11 y decisión: incorporar, adaptar, estudiar o descartar.
+Se mantendrá una matriz separada de herramientas GitHub verificadas. La meta será 200 herramientas únicas, además de una auditoría fijada de OpenClaw y sus forks relevantes. Cada entrada deberá contener URL, función, plataforma, requisitos de root, seguridad, licencia, actividad, compatibilidad Android 11 y decisión: incorporar, adaptar, estudiar o descartar.
 
 No se copiarán repositorios completos. Se seleccionarán componentes pequeños después de revisar código, licencia, dependencias, permisos, pruebas y comportamiento real.
 
