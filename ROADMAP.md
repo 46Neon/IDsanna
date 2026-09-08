@@ -262,3 +262,24 @@ Esto no significa saltar bloques: cada bloque seguirá teniendo implementación,
 - Acciones externas o irreversibles con confirmación humana.
 - Las claves privadas permanecen fuera del frontend.
 - La compatibilidad se declarará únicamente después de pruebas en dispositivo.
+
+## Referencia externa: ZorvAI y navegador controlado
+
+El repositorio público [Quor-a/ZorvAI](https://github.com/Quor-a/ZorvAI) fue analizado para mejorar el plan, especialmente su superficie WebView visible, observación DOM estructurada, identificadores de elementos, espera de carga, primitivas de acción y trazabilidad del agente. El análisis detallado queda en [`ZORVAI_ANALYSIS.md`](ZORVAI_ANALYSIS.md).
+
+IDsanna adoptará esos patrones por etapas, sin copiar el runtime externo:
+
+- Contrato tipado para `browser.navigate`, `browser.observe` y acciones limitadas.
+- WebView visible con HTTPS obligatorio, allow-list por sesión y permisos web explícitos.
+- Observación acotada de URL, título, texto visible y elementos interactivos.
+- Referencias de elementos ligadas a `page_epoch`, que caducan al navegar o cambiar la página.
+- `click`, `type`, `select` y `scroll` únicamente sobre una observación reciente.
+- Acción → nueva observación → postcondición → evidencia durable.
+- Límites de tamaño, nodos, tiempo, reintentos y memoria.
+- Registro de pensamiento/acción/resultado/estado con buffer limitado y redacción de datos sensibles.
+
+No se adoptarán como requisitos root, Shizuku, ADB, shell privilegiado, captura de tráfico, acceso automático a cookies/storage, permisos web automáticos ni JavaScript arbitrario del modelo. El navegador seguirá el mismo flujo de seguridad que el resto de capacidades:
+
+```text
+AgentContract → Planner → PolicyEngine → ApprovalManager → BrowserToolRouter → WebView → VerificationCoordinator
+```
