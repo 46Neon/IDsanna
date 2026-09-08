@@ -47,7 +47,21 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
-## Observaciones incorporadas de OpenCode
+## Auditoría de bloqueos antes del Runtime
+
+CI de `main` está pasando; no hay un error de compilación que impida avanzar. Sí existen límites funcionales que deben resolverse antes de ejecutar herramientas reales:
+
+- Planner y checkpoints todavía son una base mínima; los checkpoints deben pasar a almacenamiento durable antes de reanudar tras reinicio.
+- ApprovalManager mantiene solicitudes en memoria; antes de acciones sensibles deberá persistir solicitudes, expiración, identidad, alcance y decisión.
+- PolicyEngine valida herramienta y capacidad, pero todavía no valida esquema completo de parámetros ni contexto de pantalla.
+- No existe aún ToolRouter/Runtime; ninguna herramienta real debe ejecutarse hasta que exista aislamiento, timeout, cancelación, límite de salida y verificación.
+- El parser actual es determinista y limitado; el LLM futuro no podrá saltarse su esquema ni convertir texto directamente en shell.
+- Falta una prueba de crash/resume y una prueba de doble ejecución para evitar efectos duplicados.
+
+La investigación de OpenClaw, Hermes Agent y OpenCode añade controles obligatorios: lista de herramientas permitidas, autorización por identidad/sesión/capacidad, límites de llamadas, aprobación persistente, reanudación después de reinicio, outbox para eventos y aislamiento de subagentes. También se evitarán reglas gigantes en logs y respuestas sin límite para prevenir consumo de disco o memoria.
+
+Resolución adoptada: el Runtime se construirá primero como simulador sin efectos externos; después se añadirá un ToolRouter real solo para herramientas de lectura y con verificación. Las acciones mutantes quedarán bloqueadas hasta que pasen pruebas de aprobación, idempotencia, cancelación y crash/resume.
+
 
 OpenCode confirma que el control del modelo debe venir de la arquitectura, no solo del prompt. IDsanna adoptará estas reglas:
 
