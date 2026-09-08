@@ -47,7 +47,14 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
-## Arquitectura consolidada por comparación de repositorios
+## Investigación comunitaria y de producto
+
+Se investigarán GitHub, documentación oficial, Stack Overflow, Hacker News, Indie Hackers, Product Hunt y publicaciones públicas de X como fuentes complementarias. Cada fuente tendrá un peso distinto: código/issues/documentación para evidencia técnica; Stack Overflow para soluciones puntuales; HN para debates y experiencias; Product Hunt/Indie Hackers/X para necesidades, validación y señales de producto, nunca como prueba de compatibilidad Android.
+
+Hallazgos iniciales: Gotcha y Caesr muestran demanda de asistentes que actúan sobre apps; NativeBridge muestra valor de dispositivos reales y reportes de fallos; HN evidencia que Accessibility puede dar control amplio pero también riesgos de seguridad; Indie Hackers refuerza la estrategia visual → automatizar repetición → conectar IA. Estos hallazgos orientan producto, pero la prueba técnica seguirá exigiendo Android 11 físico, permisos explícitos y evidencia reproducible.
+
+La búsqueda para cada una de las 15 capacidades seguirá: problema → solución encontrada → compatibilidad → riesgo/licencia → parche posible → prueba CI/emulador → prueba física. No se copiarán afirmaciones comerciales sin reproducirlas.
+
 
 La comparación de OpenClaw, OpenCode, Hermes Agent, LangGraph, Temporal, PydanticAI, AutoGen, OpenHands, SWE-ReX, Browser Use, Stagehand, AndroidWorld, Appium, Maestro, UiAutomator2, scrcpy, DroidPilot, Mobilerun y otros proyectos confirma cinco planos separados:
 
