@@ -39,6 +39,12 @@ Se mantendrá una matriz separada de herramientas GitHub verificadas. Cada entra
 
 No se copiarán repositorios completos. Se seleccionarán componentes pequeños después de revisar código, licencia, dependencias, permisos, pruebas y comportamiento real.
 
+## Política de ramas y referencias externas
+
+No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo separa trabajo dentro del mismo repositorio; no integra código ni aporta compatibilidad por sí misma. Cada referencia externa tendrá una ficha con URL, commit/tag revisado, licencia, componentes candidatos, riesgos, pruebas y decisión.
+
+La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
+
 ## Restricciones
 
 - Sin root como requisito.
