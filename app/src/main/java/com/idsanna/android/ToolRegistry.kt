@@ -22,6 +22,7 @@ class ToolRegistry {
             register(ToolDefinition("android.swipe", "android", Risk.MEDIUM, requiresConfirmation = false, inputFields = setOf("x1", "y1", "x2", "y2")))
             register(ToolDefinition("android.global_back", "android", Risk.MEDIUM, requiresConfirmation = false))
             register(ToolDefinition("browser.navigate", "browser", Risk.MEDIUM, requiresConfirmation = true, inputFields = setOf("url")))
+            register(ToolDefinition("browser.observe", "browser", Risk.LOW, requiresConfirmation = false))
             register(ToolDefinition("termux.run_registered_task", "termux", Risk.HIGH, requiresConfirmation = true, inputFields = setOf("task")))
             register(ToolDefinition("network.get_local_ip", "network", Risk.LOW, requiresConfirmation = false))
             register(ToolDefinition("cad.create_geometry", "autocad", Risk.HIGH, requiresConfirmation = true, inputFields = setOf("geometry")))

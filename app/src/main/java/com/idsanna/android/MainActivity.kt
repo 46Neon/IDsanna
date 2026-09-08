@@ -22,7 +22,8 @@ class MainActivity : Activity() {
         status = TextView(this).apply { text = "Estado: burbuja detenida"; textSize = 16f; gravity = Gravity.CENTER; setPadding(0, 0, 0, 18) }
         val start = Button(this).apply { text = "Activar burbuja"; setOnClickListener { if (!Settings.canDrawOverlays(this@MainActivity)) { startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))); status.text = "Estado: autoriza la ventana flotante" } else { ContextCompat.startForegroundService(this@MainActivity, Intent(this@MainActivity, OverlayService::class.java)); status.text = "Estado: burbuja activa" } } }
         val stop = Button(this).apply { text = "Detener burbuja"; setOnClickListener { stopService(Intent(this@MainActivity, OverlayService::class.java)); status.text = "Estado: burbuja detenida" } }
+        val browser = Button(this).apply { text = "Abrir navegador controlado"; setOnClickListener { startActivity(Intent(this@MainActivity, BrowserActivity::class.java)) } }
         val accessibility = Button(this).apply { text = "Configurar control autorizado"; setOnClickListener { startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) } }
-        root.addView(title); root.addView(description); root.addView(status); root.addView(start); root.addView(stop); root.addView(accessibility); setContentView(root)
+        root.addView(title); root.addView(description); root.addView(status); root.addView(start); root.addView(stop); root.addView(browser); root.addView(accessibility); setContentView(root)
     }
 }

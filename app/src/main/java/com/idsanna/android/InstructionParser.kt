@@ -12,18 +12,20 @@ class InstructionParser {
         Regex("(\\d+(?:[.,]\\d+)?)\\s*(m|metros?|cm|centímetros?)").findAll(normalized).forEachIndexed { index, match ->
             parameters["measurement_${index + 1}"] = "${match.groupValues[1].replace(',', '.')} ${match.groupValues[2]}"
         }
+        Regex("https://[^\\s]+|http://[^\\s]+").find(normalized)?.let { parameters["url"] = it.value }
         val errors = mutableListOf<String>()
         if (original.isEmpty()) errors.add("empty_instruction")
         if (intent == "unknown") errors.add("unknown_intent")
         if (target == "unknown") errors.add("unknown_target")
         if (intent == "create" && target == "autocad" && parameters.isEmpty()) errors.add("missing_dimensions")
+        if (intent == "open" && target == "browser" && !parameters.containsKey("url")) errors.add("missing_url")
         return ParsedInstruction(normalized, tokens, intent, target, parameters, errors)
     }
 
     private fun detectTarget(text: String): String = when {
         text.contains("autocad") -> "autocad"
         text.contains("termux") || text.contains("terminal") -> "termux"
-        text.contains("navegador") || text.contains("chrome") || text.contains("web") -> "browser"
+        text.contains("navegador") || text.contains("chrome") || text.contains("web") || text.contains("http://") || text.contains("https://") -> "browser"
         text.contains("dns") || text.contains("ip") || text.contains("puerto") || text.contains("red") -> "network"
         text.contains("android") || text.contains("teléfono") || text.contains("movil") -> "android"
         else -> "unknown"
