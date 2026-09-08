@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 interface OperationPersistence {
     fun save(record: OperationRecord)
     fun get(operationId: String): OperationRecord?
+    fun list(state: OperationState = OperationState.RUNNING): List<OperationRecord> = emptyList()
 }
 
 class OperationStore(context: Context) : OperationPersistence {
@@ -33,17 +34,29 @@ class OperationStore(context: Context) : OperationPersistence {
         arrayOf(operationId)
     ).use { c ->
         if (!c.moveToFirst()) return null
-        OperationRecord(
-            operationId = c.getString(0),
-            taskId = c.getString(1),
-            stepId = c.getString(2),
-            toolName = c.getString(3),
-            startedAt = c.getLong(4),
-            timeoutAt = c.getLong(5),
-            state = OperationState.valueOf(c.getString(6)),
-            evidence = c.getString(7)
-        )
+        readRecord(c)
     }
+
+    override fun list(state: OperationState): List<OperationRecord> = db.rawQuery(
+        "SELECT operation_id,task_id,step_id,tool_name,started_at,timeout_at,state,evidence " +
+            "FROM operations WHERE state = ? ORDER BY started_at ASC",
+        arrayOf(state.name)
+    ).use { c ->
+        buildList {
+            while (c.moveToNext()) add(readRecord(c))
+        }
+    }
+
+    private fun readRecord(c: android.database.Cursor): OperationRecord = OperationRecord(
+        operationId = c.getString(0),
+        taskId = c.getString(1),
+        stepId = c.getString(2),
+        toolName = c.getString(3),
+        startedAt = c.getLong(4),
+        timeoutAt = c.getLong(5),
+        state = OperationState.valueOf(c.getString(6)),
+        evidence = c.getString(7)
+    )
 }
 
 private class OperationDatabase(context: Context) : SQLiteOpenHelper(context, "idsanna_operations.db", null, 1) {
