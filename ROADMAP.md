@@ -47,7 +47,25 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
-## Motor de instrucciones de IDsanna
+## Observaciones incorporadas de OpenCode
+
+OpenCode confirma que el control del modelo debe venir de la arquitectura, no solo del prompt. IDsanna adoptará estas reglas:
+
+- El modelo propone; nunca ejecuta directamente.
+- Las herramientas se registran con nombre, esquema, permisos, riesgo y verificación.
+- El Router rechaza herramientas inexistentes o parámetros inválidos.
+- Cada sesión conserva mensajes, llamadas, resultados, errores y checkpoints.
+- El ciclo obligatorio es modelo → herramienta → resultado → nueva decisión.
+- Habrá límites de pasos, tiempo total, reintentos, salida y presupuesto de tokens.
+- Los proveedores de modelos se abstraen detrás de una interfaz común.
+- Las tareas grandes se dividen en pasos dependientes y observables.
+- Las acciones sensibles generan una solicitud de aprobación humana.
+- El permiso de un agente no se hereda automáticamente a subagentes sin revisión.
+- Los plugins y adaptadores deben estar registrados, versionados y revisados.
+- Las pruebas unitarias, de integración y end-to-end forman parte del bloque, no son opcionales.
+
+El repositorio activo `anomalyco/opencode` será la referencia principal de patrones; `opencode-ai/opencode` queda como referencia histórica archivada. No se copiará el runtime completo: se extraerán ideas compatibles con Android, Netlify y la política de ejecución limitada de IDsanna.
+
 
 IDsanna tendrá un compilador de intención, no un compilador de lenguaje general. Sus piezas serán:
 
