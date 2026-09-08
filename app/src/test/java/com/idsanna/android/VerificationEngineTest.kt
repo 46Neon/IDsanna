@@ -1,1 +1,97 @@
-cGFja2FnZSBjb20uaWRzYW5uYS5hbmRyb2lkCgppbXBvcnQgYW5kcm9pZC5ncmFwaGljcy5SZWN0CmltcG9ydCBvcmcuanVuaXQuQXNzZXJ0LmFzc2VydEVxdWFscwppbXBvcnQgb3JnLmp1bml0LkFzc2VydC5hc3NlcnRGYWxzZQppbXBvcnQgb3JnLmp1bml0LkFzc2VydC5hc3NlcnRUcnVlCmltcG9ydCBvcmcuanVuaXQuVGVzdAoKY2xhc3MgVmVyaWZpY2F0aW9uRW5naW5lVGVzdCB7CiAgICBwcml2YXRlIHZhbCBlbmdpbmUgPSBWZXJpZmljYXRpb25FbmdpbmUoKQoKICAgIEBUZXN0CiAgICBmdW4gdmVyaWZpZXNGb3JlZ3JvdW5kUGFja2FnZSgpIHsKICAgICAgICB2YWwgYWZ0ZXIgPSBvYnNlcnZhdGlvbigib2JzLTIiLCAiY29tLmV4YW1wbGUudGFyZ2V0IiwgIlJlYWR5IikKICAgICAgICB2YWwgcmVzdWx0ID0gZW5naW5lLnZlcmlmeSgKICAgICAgICAgICAgYmVmb3JlID0gbnVsbCwKICAgICAgICAgICAgYWZ0ZXIgPSBhZnRlciwKICAgICAgICAgICAgc3BlYyA9IFZlcmlmaWNhdGlvblNwZWMoVmVyaWZpY2F0aW9uVHlwZS5GT1JFR1JPVU5EX1BBQ0tBR0UsIGV4cGVjdGVkUGFja2FnZSA9ICJjb20uZXhhbXBsZS50YXJnZXQiKQogICAgICAgICkKCiAgICAgICAgYXNzZXJ0VHJ1ZShyZXN1bHQuc3VjY2VzcykKICAgICAgICBhc3NlcnRFcXVhbHMoImZvcmVncm91bmRfcGFja2FnZV92ZXJpZmllZCIsIHJlc3VsdC5yZWFzb24pCiAgICB9CgogICAgQFRlc3QKICAgIGZ1biB2ZXJpZmllc1RleHRBcHBlYXJlZEFmdGVyQWN0aW9uKCkgewogICAgICAgIHZhbCBiZWZvcmUgPSBvYnNlcnZhdGlvbigib2JzLTEiLCAiY29tLmV4YW1wbGUiLCAiTG9hZGluZyIpCiAgICAgICAgdmFsIGFmdGVyID0gb2JzZXJ2YXRpb24oIm9icy0yIiwgImNvbS5leGFtcGxlIiwgIkRvbmUiKQogICAgICAgIHZhbCByZXN1bHQgPSBlbmdpbmUudmVyaWZ5KAogICAgICAgICAgICBiZWZvcmUsCiAgICAgICAgICAgIGFmdGVyLAogICAgICAgICAgICBWZXJpZmljYXRpb25TcGVjKFZlcmlmaWNhdGlvblR5cGUuVEVYVF9BUFBFQVJFRCwgZXhwZWN0ZWRUZXh0ID0gIkRvbmUiKQogICAgICAgICkKCiAgICAgICAgYXNzZXJ0VHJ1ZShyZXN1bHQuc3VjY2VzcykKICAgICAgICBhc3NlcnRFcXVhbHMoInRleHRfYXBwZWFyZWRfdmVyaWZpZWQiLCByZXN1bHQucmVhc29uKQogICAgfQoKICAgIEBUZXN0CiAgICBmdW4gcmVqZWN0c1RleHRUaGF0V2FzQWxyZWFkeVZpc2libGUoKSB7CiAgICAgICAgdmFsIGJlZm9yZSA9IG9ic2VydmF0aW9uKCJvYnMtMSIsICJjb20uZXhhbXBsZSIsICJEb25lIikKICAgICAgICB2YWwgYWZ0ZXIgPSBvYnNlcnZhdGlvbigib2JzLTIiLCAiY29tLmV4YW1wbGUiLCAiRG9uZSIpCiAgICAgICAgdmFsIHJlc3VsdCA9IGVuZ2luZS52ZXJpZnkoCiAgICAgICAgICAgIGJlZm9yZSwKICAgICAgICAgICAgYWZ0ZXIsCiAgICAgICAgICAgIFZlcmlmaWNhdGlvblNwZWMoVmVyaWZpY2F0aW9uVHlwZS5URVhUX0FQUEVBUkVELCBleHBlY3RlZFRleHQgPSAiRG9uZSIpCiAgICAgICAgKQoKICAgICAgICBhc3NlcnRGYWxzZShyZXN1bHQuc3VjY2VzcykKICAgICAgICBhc3NlcnRFcXVhbHMoInRleHRfYWxyZWFkeV92aXNpYmxlX2JlZm9yZV9hY3Rpb24iLCByZXN1bHQucmVhc29uKQogICAgfQoKICAgIEBUZXN0CiAgICBmdW4gdmVyaWZpZXNUZXh0RGlzYXBwZWFyZWQoKSB7CiAgICAgICAgdmFsIGJlZm9yZSA9IG9ic2VydmF0aW9uKCJvYnMtMSIsICJjb20uZXhhbXBsZSIsICJCdXN5IikKICAgICAgICB2YWwgYWZ0ZXIgPSBvYnNlcnZhdGlvbigib2JzLTIiLCAiY29tLmV4YW1wbGUiLCAiRG9uZSIpCiAgICAgICAgdmFsIHJlc3VsdCA9IGVuZ2luZS52ZXJpZnkoCiAgICAgICAgICAgIGJlZm9yZSwKICAgICAgICAgICAgYWZ0ZXIsCiAgICAgICAgICAgIFZlcmlmaWNhdGlvblNwZWMoVmVyaWZpY2F0aW9uVHlwZS5URVhUX0RJU0FQUEVBUkVELCBleHBlY3RlZFRleHQgPSAiQnVzeSIpCiAgICAgICAgKQoKICAgICAgICBhc3NlcnRUcnVlKHJlc3VsdC5zdWNjZXNzKQogICAgICAgIGFzc2VydEVxdWFscygidGV4dF9kaXNhcHBlYXJlZF92ZXJpZmllZCIsIHJlc3VsdC5yZWFzb24pCiAgICB9CgogICAgQFRlc3QKICAgIGZ1biByZWplY3RzTWlzc2luZ1Bvc3RPYnNlcnZhdGlvbigpIHsKICAgICAgICB2YWwgcmVzdWx0ID0gZW5naW5lLnZlcmlmeSgKICAgICAgICAgICAgYmVmb3JlID0gbnVsbCwKICAgICAgICAgICAgYWZ0ZXIgPSBudWxsLAogICAgICAgICAgICBzcGVjID0gVmVyaWZpY2F0aW9uU3BlYyhWZXJpZmljYXRpb25UeXBlLk9CU0VSVkFUSU9OX0NIQU5HRUQpCiAgICAgICAgKQoKICAgICAgICBhc3NlcnRGYWxzZShyZXN1bHQuc3VjY2VzcykKICAgICAgICBhc3NlcnRFcXVhbHMoIm1pc3NpbmdfcG9zdF9vYnNlcnZhdGlvbiIsIHJlc3VsdC5yZWFzb24pCiAgICB9CgogICAgcHJpdmF0ZSBmdW4gb2JzZXJ2YXRpb24oaWQ6IFN0cmluZywgcGFja2FnZU5hbWU6IFN0cmluZywgdGV4dDogU3RyaW5nKTogQWNjZXNzaWJpbGl0eU9ic2VydmF0aW9uID0KICAgICAgICBBY2Nlc3NpYmlsaXR5T2JzZXJ2YXRpb24oCiAgICAgICAgICAgIG9ic2VydmF0aW9uSWQgPSBpZCwKICAgICAgICAgICAgdGltZXN0YW1wID0gMUwsCiAgICAgICAgICAgIHBhY2thZ2VOYW1lID0gcGFja2FnZU5hbWUsCiAgICAgICAgICAgIGNsYXNzTmFtZSA9ICJhbmRyb2lkLnZpZXcuVmlldyIsCiAgICAgICAgICAgIG5vZGVzID0gbGlzdE9mKAogICAgICAgICAgICAgICAgT2JzZXJ2ZWROb2RlKAogICAgICAgICAgICAgICAgICAgIHRleHQgPSB0ZXh0LAogICAgICAgICAgICAgICAgICAgIGNvbnRlbnREZXNjcmlwdGlvbiA9IG51bGwsCiAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lID0gImFuZHJvaWQud2lkZ2V0LlRleHRWaWV3IiwKICAgICAgICAgICAgICAgICAgICBjbGlja2FibGUgPSBmYWxzZSwKICAgICAgICAgICAgICAgICAgICBlZGl0YWJsZSA9IGZhbHNlLAogICAgICAgICAgICAgICAgICAgIGVuYWJsZWQgPSB0cnVlLAogICAgICAgICAgICAgICAgICAgIGJvdW5kcyA9IFJlY3QoMCwgMCwgMTAsIDEwKQogICAgICAgICAgICAgICAgKQogICAgICAgICAgICApCiAgICAgICAgKQp9Cg==
+package com.idsanna.android
+
+import android.graphics.Rect
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+class VerificationEngineTest {
+    private val engine = VerificationEngine()
+
+    @Test
+    fun verifiesForegroundPackage() {
+        val after = observation("obs-2", "com.example.target", "Ready")
+        val result = engine.verify(
+            before = null,
+            after = after,
+            spec = VerificationSpec(VerificationType.FOREGROUND_PACKAGE, expectedPackage = "com.example.target")
+        )
+
+        assertTrue(result.success)
+        assertEquals("foreground_package_verified", result.reason)
+    }
+
+    @Test
+    fun verifiesTextAppearedAfterAction() {
+        val before = observation("obs-1", "com.example", "Loading")
+        val after = observation("obs-2", "com.example", "Done")
+        val result = engine.verify(
+            before,
+            after,
+            VerificationSpec(VerificationType.TEXT_APPEARED, expectedText = "Done")
+        )
+
+        assertTrue(result.success)
+        assertEquals("text_appeared_verified", result.reason)
+    }
+
+    @Test
+    fun rejectsTextThatWasAlreadyVisible() {
+        val before = observation("obs-1", "com.example", "Done")
+        val after = observation("obs-2", "com.example", "Done")
+        val result = engine.verify(
+            before,
+            after,
+            VerificationSpec(VerificationType.TEXT_APPEARED, expectedText = "Done")
+        )
+
+        assertFalse(result.success)
+        assertEquals("text_already_visible_before_action", result.reason)
+    }
+
+    @Test
+    fun verifiesTextDisappeared() {
+        val before = observation("obs-1", "com.example", "Busy")
+        val after = observation("obs-2", "com.example", "Done")
+        val result = engine.verify(
+            before,
+            after,
+            VerificationSpec(VerificationType.TEXT_DISAPPEARED, expectedText = "Busy")
+        )
+
+        assertTrue(result.success)
+        assertEquals("text_disappeared_verified", result.reason)
+    }
+
+    @Test
+    fun rejectsMissingPostObservation() {
+        val result = engine.verify(
+            before = null,
+            after = null,
+            spec = VerificationSpec(VerificationType.OBSERVATION_CHANGED)
+        )
+
+        assertFalse(result.success)
+        assertEquals("missing_post_observation", result.reason)
+    }
+
+    private fun observation(id: String, packageName: String, text: String): AccessibilityObservation =
+        AccessibilityObservation(
+            observationId = id,
+            timestamp = 1L,
+            packageName = packageName,
+            className = "android.view.View",
+            nodes = listOf(
+                ObservedNode(
+                    text = text,
+                    contentDescription = null,
+                    className = "android.widget.TextView",
+                    clickable = false,
+                    editable = false,
+                    enabled = true,
+                    bounds = Rect(0, 0, 10, 10)
+                )
+            )
+        )
+}

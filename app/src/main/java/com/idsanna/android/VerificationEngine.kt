@@ -1,1 +1,108 @@
-cGFja2FnZSBjb20uaWRzYW5uYS5hbmRyb2lkCgovKioKICogUHVyZSBwb3N0Y29uZGl0aW9uIGNoZWNrcyBvdmVyIGFjY2Vzc2liaWxpdHkgb2JzZXJ2YXRpb25zLgogKgogKiBLZWVwaW5nIHRoaXMgbG9naWMgaW5kZXBlbmRlbnQgb2YgQWNjZXNzaWJpbGl0eVNlcnZpY2UgbWFrZXMgaXQgdGVzdGFibGUKICogd2l0aG91dCBhIHBoeXNpY2FsIGRldmljZS4gVGhlIHJ1bnRpbWUgaXMgcmVzcG9uc2libGUgZm9yIG9idGFpbmluZyB0aGUKICogb2JzZXJ2YXRpb25zIGFuZCBkZWNpZGluZyBob3cgbG9uZyB0byB3YWl0IGZvciB0aGUgcG9zdGNvbmRpdGlvbi4KICovCmNsYXNzIFZlcmlmaWNhdGlvbkVuZ2luZSB7CiAgICBmdW4gdmVyaWZ5KAogICAgICAgIGJlZm9yZTogQWNjZXNzaWJpbGl0eU9ic2VydmF0aW9uPywKICAgICAgICBhZnRlcjogQWNjZXNzaWJpbGl0eU9ic2VydmF0aW9uPywKICAgICAgICBzcGVjOiBWZXJpZmljYXRpb25TcGVjCiAgICApOiBWZXJpZmljYXRpb25FdmlkZW5jZSB7CiAgICAgICAgaWYgKGFmdGVyID09IG51bGwpIHJldHVybiBWZXJpZmljYXRpb25FdmlkZW5jZShmYWxzZSwgIm1pc3NpbmdfcG9zdF9vYnNlcnZhdGlvbiIsIG51bGwpCgogICAgICAgIHJldHVybiB3aGVuIChzcGVjLnR5cGUpIHsKICAgICAgICAgICAgVmVyaWZpY2F0aW9uVHlwZS5GT1JFR1JPVU5EX1BBQ0tBR0UgLT4gewogICAgICAgICAgICAgICAgdmFsIGV4cGVjdGVkID0gc3BlYy5leHBlY3RlZFBhY2thZ2UKICAgICAgICAgICAgICAgICAgICA/OiByZXR1cm4gVmVyaWZpY2F0aW9uRXZpZGVuY2UoZmFsc2UsICJtaXNzaW5nX2V4cGVjdGVkX3BhY2thZ2UiLCBhZnRlci5vYnNlcnZhdGlvbklkKQogICAgICAgICAgICAgICAgdmFsIHN1Y2Nlc3MgPSBhZnRlci5wYWNrYWdlTmFtZSA9PSBleHBlY3RlZAogICAgICAgICAgICAgICAgVmVyaWZpY2F0aW9uRXZpZGVuY2UoCiAgICAgICAgICAgICAgICAgICAgc3VjY2VzcywKICAgICAgICAgICAgICAgICAgICBpZiAoc3VjY2VzcykgImZvcmVncm91bmRfcGFja2FnZV92ZXJpZmllZCIgZWxzZSAidW5leHBlY3RlZF9mb3JlZ3JvdW5kX3BhY2thZ2UiLAogICAgICAgICAgICAgICAgICAgIGFmdGVyLm9ic2VydmF0aW9uSWQKICAgICAgICAgICAgICAgICkKICAgICAgICAgICAgfQoKICAgICAgICAgICAgVmVyaWZpY2F0aW9uVHlwZS5WSVNJQkxFX1RFWFQgLT4gewogICAgICAgICAgICAgICAgdmFsIGV4cGVjdGVkID0gc3BlYy5leHBlY3RlZFRleHQKICAgICAgICAgICAgICAgICAgICA/OiByZXR1cm4gVmVyaWZpY2F0aW9uRXZpZGVuY2UoZmFsc2UsICJtaXNzaW5nX2V4cGVjdGVkX3RleHQiLCBhZnRlci5vYnNlcnZhdGlvbklkKQogICAgICAgICAgICAgICAgdmFsIHN1Y2Nlc3MgPSBjb250YWluc1RleHQoYWZ0ZXIsIGV4cGVjdGVkKQogICAgICAgICAgICAgICAgVmVyaWZpY2F0aW9uRXZpZGVuY2UoCiAgICAgICAgICAgICAgICAgICAgc3VjY2VzcywKICAgICAgICAgICAgICAgICAgICBpZiAoc3VjY2VzcykgInZpc2libGVfdGV4dF92ZXJpZmllZCIgZWxzZSAidmlzaWJsZV90ZXh0X25vdF9mb3VuZCIsCiAgICAgICAgICAgICAgICAgICAgYWZ0ZXIub2JzZXJ2YXRpb25JZAogICAgICAgICAgICAgICAgKQogICAgICAgICAgICB9CgogICAgICAgICAgICBWZXJpZmljYXRpb25UeXBlLlRFWFRfQVBQRUFSRUQgLT4gewogICAgICAgICAgICAgICAgdmFsIGV4cGVjdGVkID0gc3BlYy5leHBlY3RlZFRleHQKICAgICAgICAgICAgICAgICAgICA/OiByZXR1cm4gVmVyaWZpY2F0aW9uRXZpZGVuY2UoZmFsc2UsICJtaXNzaW5nX2V4cGVjdGVkX3RleHQiLCBhZnRlci5vYnNlcnZhdGlvbklkKQogICAgICAgICAgICAgICAgdmFsIHdhc1Zpc2libGUgPSBiZWZvcmU/LmxldCB7IGNvbnRhaW5zVGV4dChpdCwgZXhwZWN0ZWQpIH0gPT0gdHJ1ZQogICAgICAgICAgICAgICAgdmFsIGlzVmlzaWJsZSA9IGNvbnRhaW5zVGV4dChhZnRlciwgZXhwZWN0ZWQpCiAgICAgICAgICAgICAgICB2YWwgc3VjY2VzcyA9ICF3YXNWaXNpYmxlICYmIGlzVmlzaWJsZQogICAgICAgICAgICAgICAgVmVyaWZpY2F0aW9uRXZpZGVuY2UoCiAgICAgICAgICAgICAgICAgICAgc3VjY2VzcywKICAgICAgICAgICAgICAgICAgICB3aGVuIHsKICAgICAgICAgICAgICAgICAgICAgICAgc3VjY2VzcyAtPiAidGV4dF9hcHBlYXJlZF92ZXJpZmllZCIKICAgICAgICAgICAgICAgICAgICAgICAgd2FzVmlzaWJsZSAtPiAidGV4dF9hbHJlYWR5X3Zpc2libGVfYmVmb3JlX2FjdGlvbiIKICAgICAgICAgICAgICAgICAgICAgICAgZWxzZSAtPiAidGV4dF9kaWRfbm90X2FwcGVhciIKICAgICAgICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgICAgICAgIGFmdGVyLm9ic2VydmF0aW9uSWQKICAgICAgICAgICAgICAgICkKICAgICAgICAgICAgfQoKICAgICAgICAgICAgVmVyaWZpY2F0aW9uVHlwZS5URVhUX0RJU0FQUEVBUkVEIC0+IHsKICAgICAgICAgICAgICAgIHZhbCBleHBlY3RlZCA9IHNwZWMuZXhwZWN0ZWRUZXh0CiAgICAgICAgICAgICAgICAgICAgPzogcmV0dXJuIFZlcmlmaWNhdGlvbkV2aWRlbmNlKGZhbHNlLCAibWlzc2luZ19leHBlY3RlZF90ZXh0IiwgYWZ0ZXIub2JzZXJ2YXRpb25JZCkKICAgICAgICAgICAgICAgIHZhbCB3YXNWaXNpYmxlID0gYmVmb3JlPy5sZXQgeyBjb250YWluc1RleHQoaXQsIGV4cGVjdGVkKSB9ID09IHRydWUKICAgICAgICAgICAgICAgIHZhbCBpc1Zpc2libGUgPSBjb250YWluc1RleHQoYWZ0ZXIsIGV4cGVjdGVkKQogICAgICAgICAgICAgICAgdmFsIHN1Y2Nlc3MgPSB3YXNWaXNpYmxlICYmICFpc1Zpc2libGUKICAgICAgICAgICAgICAgIFZlcmlmaWNhdGlvbkV2aWRlbmNlKAogICAgICAgICAgICAgICAgICAgIHN1Y2Nlc3MsCiAgICAgICAgICAgICAgICAgICAgd2hlbiB7CiAgICAgICAgICAgICAgICAgICAgICAgIHN1Y2Nlc3MgLT4gInRleHRfZGlzYXBwZWFyZWRfdmVyaWZpZWQiCiAgICAgICAgICAgICAgICAgICAgICAgICF3YXNWaXNpYmxlIC0+ICJ0ZXh0X25vdF92aXNpYmxlX2JlZm9yZV9hY3Rpb24iCiAgICAgICAgICAgICAgICAgICAgICAgIGVsc2UgLT4gInRleHRfc3RpbGxfdmlzaWJsZSIKICAgICAgICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgICAgICAgIGFmdGVyLm9ic2VydmF0aW9uSWQKICAgICAgICAgICAgICAgICkKICAgICAgICAgICAgfQoKICAgICAgICAgICAgVmVyaWZpY2F0aW9uVHlwZS5PQlNFUlZBVElPTl9DSEFOR0VEIC0+IHsKICAgICAgICAgICAgICAgIHZhbCBzdWNjZXNzID0gYmVmb3JlID09IG51bGwgfHwgYmVmb3JlLm9ic2VydmF0aW9uSWQgIT0gYWZ0ZXIub2JzZXJ2YXRpb25JZAogICAgICAgICAgICAgICAgVmVyaWZpY2F0aW9uRXZpZGVuY2UoCiAgICAgICAgICAgICAgICAgICAgc3VjY2VzcywKICAgICAgICAgICAgICAgICAgICBpZiAoc3VjY2VzcykgIm9ic2VydmF0aW9uX2NoYW5nZWQiIGVsc2UgIm9ic2VydmF0aW9uX3VuY2hhbmdlZCIsCiAgICAgICAgICAgICAgICAgICAgYWZ0ZXIub2JzZXJ2YXRpb25JZAogICAgICAgICAgICAgICAgKQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQoKICAgIHByaXZhdGUgZnVuIGNvbnRhaW5zVGV4dChvYnNlcnZhdGlvbjogQWNjZXNzaWJpbGl0eU9ic2VydmF0aW9uLCBleHBlY3RlZDogU3RyaW5nKTogQm9vbGVhbiA9CiAgICAgICAgb2JzZXJ2YXRpb24ubm9kZXMuYW55IHsgaXQudGV4dCA9PSBleHBlY3RlZCB8fCBpdC5jb250ZW50RGVzY3JpcHRpb24gPT0gZXhwZWN0ZWQgfQp9CgplbnVtIGNsYXNzIFZlcmlmaWNhdGlvblR5cGUgewogICAgRk9SRUdST1VORF9QQUNLQUdFLAogICAgVklTSUJMRV9URVhULAogICAgVEVYVF9BUFBFQVJFRCwKICAgIFRFWFRfRElTQVBQRUFSRUQsCiAgICBPQlNFUlZBVElPTl9DSEFOR0VECn0KCmRhdGEgY2xhc3MgVmVyaWZpY2F0aW9uU3BlYygKICAgIHZhbCB0eXBlOiBWZXJpZmljYXRpb25UeXBlLAogICAgdmFsIGV4cGVjdGVkVGV4dDogU3RyaW5nPyA9IG51bGwsCiAgICB2YWwgZXhwZWN0ZWRQYWNrYWdlOiBTdHJpbmc/ID0gbnVsbAopCgpkYXRhIGNsYXNzIFZlcmlmaWNhdGlvbkV2aWRlbmNlKAogICAgdmFsIHN1Y2Nlc3M6IEJvb2xlYW4sCiAgICB2YWwgcmVhc29uOiBTdHJpbmcsCiAgICB2YWwgb2JzZXJ2YXRpb25JZDogU3RyaW5nPwopCg==
+package com.idsanna.android
+
+/**
+ * Pure postcondition checks over accessibility observations.
+ *
+ * Keeping this logic independent of AccessibilityService makes it testable
+ * without a physical device. The runtime is responsible for obtaining the
+ * observations and deciding how long to wait for the postcondition.
+ */
+class VerificationEngine {
+    fun verify(
+        before: AccessibilityObservation?,
+        after: AccessibilityObservation?,
+        spec: VerificationSpec
+    ): VerificationEvidence {
+        if (after == null) return VerificationEvidence(false, "missing_post_observation", null)
+
+        return when (spec.type) {
+            VerificationType.FOREGROUND_PACKAGE -> {
+                val expected = spec.expectedPackage
+                    ?: return VerificationEvidence(false, "missing_expected_package", after.observationId)
+                val success = after.packageName == expected
+                VerificationEvidence(
+                    success,
+                    if (success) "foreground_package_verified" else "unexpected_foreground_package",
+                    after.observationId
+                )
+            }
+
+            VerificationType.VISIBLE_TEXT -> {
+                val expected = spec.expectedText
+                    ?: return VerificationEvidence(false, "missing_expected_text", after.observationId)
+                val success = containsText(after, expected)
+                VerificationEvidence(
+                    success,
+                    if (success) "visible_text_verified" else "visible_text_not_found",
+                    after.observationId
+                )
+            }
+
+            VerificationType.TEXT_APPEARED -> {
+                val expected = spec.expectedText
+                    ?: return VerificationEvidence(false, "missing_expected_text", after.observationId)
+                val wasVisible = before?.let { containsText(it, expected) } == true
+                val isVisible = containsText(after, expected)
+                val success = !wasVisible && isVisible
+                VerificationEvidence(
+                    success,
+                    when {
+                        success -> "text_appeared_verified"
+                        wasVisible -> "text_already_visible_before_action"
+                        else -> "text_did_not_appear"
+                    },
+                    after.observationId
+                )
+            }
+
+            VerificationType.TEXT_DISAPPEARED -> {
+                val expected = spec.expectedText
+                    ?: return VerificationEvidence(false, "missing_expected_text", after.observationId)
+                val wasVisible = before?.let { containsText(it, expected) } == true
+                val isVisible = containsText(after, expected)
+                val success = wasVisible && !isVisible
+                VerificationEvidence(
+                    success,
+                    when {
+                        success -> "text_disappeared_verified"
+                        !wasVisible -> "text_not_visible_before_action"
+                        else -> "text_still_visible"
+                    },
+                    after.observationId
+                )
+            }
+
+            VerificationType.OBSERVATION_CHANGED -> {
+                val success = before == null || before.observationId != after.observationId
+                VerificationEvidence(
+                    success,
+                    if (success) "observation_changed" else "observation_unchanged",
+                    after.observationId
+                )
+            }
+        }
+    }
+
+    private fun containsText(observation: AccessibilityObservation, expected: String): Boolean =
+        observation.nodes.any { it.text == expected || it.contentDescription == expected }
+}
+
+enum class VerificationType {
+    FOREGROUND_PACKAGE,
+    VISIBLE_TEXT,
+    TEXT_APPEARED,
+    TEXT_DISAPPEARED,
+    OBSERVATION_CHANGED
+}
+
+data class VerificationSpec(
+    val type: VerificationType,
+    val expectedText: String? = null,
+    val expectedPackage: String? = null
+)
+
+data class VerificationEvidence(
+    val success: Boolean,
+    val reason: String,
+    val observationId: String?
+)
