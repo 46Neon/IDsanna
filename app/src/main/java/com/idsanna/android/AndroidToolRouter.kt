@@ -1,8 +1,12 @@
 package com.idsanna.android
 
-class AndroidToolRouter(private val actions: AccessibilityActionExecutor) {
+class AndroidToolRouter(
+    private val actions: AccessibilityActionExecutor,
+    private val operationControl: OperationControl = OperationControl()
+) {
     fun execute(request: ToolExecutionRequest): AndroidExecutionResult {
-        return when (request.toolName) {
+        if (!operationControl.start(request.operationId)) return AndroidExecutionResult(request.operationId, false, "duplicate_operation")
+        val result = when (request.toolName) {
             "android.click" -> request.arguments["text"]?.let { result(request, actions.clickText(it)) }
                 ?: AndroidExecutionResult(request.operationId, false, "missing_text")
             "android.type_text" -> request.arguments["text"]?.let { result(request, actions.typeText(it)) }
@@ -17,7 +21,11 @@ class AndroidToolRouter(private val actions: AccessibilityActionExecutor) {
             "android.global_back" -> result(request, actions.globalBack())
             else -> AndroidExecutionResult(request.operationId, false, "unsupported_android_tool")
         }
+        if (result.accepted) operationControl.complete(request.operationId) else operationControl.fail(request.operationId)
+        return result
     }
+
+    fun cancel(operationId: String): Boolean = operationControl.cancel(operationId)
 
     private fun result(request: ToolExecutionRequest, action: ActionResult) = AndroidExecutionResult(request.operationId, action.accepted, action.evidence)
 }
