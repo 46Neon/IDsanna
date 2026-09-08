@@ -36,6 +36,7 @@ class IdsannaService : Service(), RecognitionListener, TextToSpeech.OnInitListen
 
     private fun recoverPersistedOperations() {
         val results = RecoveryCoordinator(OperationStore(this)).recover()
+        RecoveryStateIntegrator(RuntimeStateStore(this)).apply(results)
         if (results.isEmpty()) return
 
         val summary = results.groupingBy { it.decision.action }.eachCount()
