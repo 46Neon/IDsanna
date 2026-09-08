@@ -13,6 +13,25 @@ class AccessibilityActionExecutor(private val service: AccessibilityService) {
         return ActionResult(node.performAction(AccessibilityNodeInfo.ACTION_CLICK), "click_requested")
     }
 
+    fun clickContentDescription(description: String): ActionResult {
+        val node = findNode { it.contentDescription?.toString() == description && it.isClickable }
+            ?: return ActionResult(false, "content_description_target_not_found")
+        return ActionResult(node.performAction(AccessibilityNodeInfo.ACTION_CLICK), "content_description_click_requested")
+    }
+
+    fun focusField(): ActionResult {
+        val node = findNode { it.isEditable && it.isEnabled }
+            ?: return ActionResult(false, "editable_target_not_found")
+        return ActionResult(node.performAction(AccessibilityNodeInfo.ACTION_FOCUS), "field_focus_requested")
+    }
+
+    fun scrollToText(text: String): ActionResult {
+        val node = findNode { it.text?.toString() == text }
+            ?: return ActionResult(false, "scroll_target_not_found")
+        val accepted = node.performAction(AccessibilityNodeInfo.ACTION_SHOW_ON_SCREEN)
+        return ActionResult(accepted, if (accepted) "scroll_to_text_requested" else "scroll_to_text_rejected")
+    }
+
     fun typeText(text: String): ActionResult {
         val node = findNode { it.isEditable && it.isFocused }
             ?: findNode { it.isEditable }
