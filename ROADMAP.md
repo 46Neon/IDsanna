@@ -47,7 +47,24 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
-## Administrador de capacidades y aplicaciones
+## Pruebas de aplicaciones mediante el sistema Android
+
+El diagnóstico de control se hará con APIs reales del dispositivo, no solo con análisis estático. Cada prueba será segura, reversible y visible para el usuario; no se enviarán mensajes, no se publicará, no se borrará y no se modificarán datos durante el diagnóstico.
+
+Secuencia de prueba por aplicación:
+
+1. PackageManager: confirmar paquete, versión y actividad lanzable dentro de la visibilidad permitida por Android.
+2. Intent: abrir la aplicación y verificar el paquete en primer plano.
+3. AccessibilityService: recibir ventana, construir árbol de nodos y comprobar lectura, estados, acciones disponibles y campos editables.
+4. Acción de solo lectura: consultar nodos, descripción, clase, bounds y estado sin mutar datos.
+5. Acción reversible controlada, solo si el usuario la autoriza: enfocar un campo de prueba o realizar un gesto sin envío.
+6. MediaProjection opcional: solicitar consentimiento y comprobar captura; marcar `FLAG_SECURE` o bloqueo si corresponde.
+7. Verificación: comparar observación antes/después, registrar evidencia y cerrar la app sin dejar cambios.
+
+Cada resultado tendrá evidencia, timestamp, versión de app, versión Android, fabricante, permisos activos y estado. Si una app muestra login, CAPTCHA, permiso, pantalla segura, UI inaccesible o comportamiento inesperado, la prueba se detiene y queda como `manual_intervention`, `blocked` o `unknown`; nunca se fuerza.
+
+No se probarán silenciosamente todas las apps ni se ejecutarán acciones destructivas. El usuario seleccionará el alcance o aprobará el diagnóstico. Las pruebas de UIAutomator/Appium serán para CI/dispositivos de prueba; el diagnóstico dentro de la APK usará principalmente PackageManager, Intent, AccessibilityService, Activity/Usage state y MediaProjection bajo consentimiento.
+
 
 Al abrir la app, IDsanna tendrá un panel de diagnóstico que analiza las capacidades observables del dispositivo y de las aplicaciones visibles para el sistema. No declarará que una app es controlable solo por estar instalada: comprobará package/versión, intents, accesibilidad disponible, UI semántica cuando se pruebe, overlay, MediaProjection, permisos y adaptador específico.
 
