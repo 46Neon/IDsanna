@@ -4,7 +4,42 @@
 
 IDsanna se construirá por bloques verificables. Android 11 será el primer dispositivo de referencia. La APK debe mostrar la actividad, solicitar permisos explícitos, pausar ante estados ambiguos y verificar cada resultado.
 
-## Bloques
+## GitHub, releases y control de versiones
+
+El workflow actual compila la APK, pero el repositorio todavía no tiene un ciclo completo de release. Se añadirá por etapas:
+
+- CI por Pull Request: test unitario, lint, compilación y validación de manifest.
+- Artifacts solo en ejecuciones manuales o candidatas; no generar APK descargable por cada push.
+- `release.yml` activado únicamente por tag versionado `vMAJOR.MINOR.PATCH` o ejecución manual autorizada.
+- Release candidate separado de release estable; changelog y criterios de aceptación adjuntos.
+- VersionCode/versionName derivados de la versión aprobada, sin publicar antes de terminar bloques.
+- Permisos mínimos en Actions, `concurrency` para cancelar builds obsoletos y retención limitada de artifacts.
+- Environments protegidos para releases; secretos nunca en APK, logs o repositorio.
+- Dependabot/Renovate para dependencias, CodeQL y secret scanning cuando sean compatibles con el plan.
+- SBOM, hashes de artefactos y notas de commit para trazabilidad.
+- Branch protection/rulesets: CI obligatorio, revisión y prohibición de integrar ramas con fallos.
+- Codespaces/devcontainer reproducible para desarrollo; GitHub Actions será la fuente de validación limpia.
+- OIDC se evaluará para autenticarse con servicios externos sin tokens permanentes; no se guardará una clave de Netlify en el APK.
+
+No se publicará una APK hasta que el usuario reciba el aviso de candidata integrada y todos los bloques planificados estén cerrados.
+
+## Netlify como control plane remoto
+
+Netlify Blobs puede servir para objetos, resultados grandes, caché remota y claves simples; Netlify Database puede servir como PostgreSQL para tareas, sesiones, eventos, checkpoints, aprobaciones e idempotency keys. Netlify Functions será el API intermedio autenticado: la APK nunca hablará con la base usando credenciales administrativas y el LLM nunca accederá directamente.
+
+Arquitectura:
+
+```text
+APK mínima/offline
+→ API autenticada de Netlify Functions
+→ Netlify Database: estado transaccional
+→ Netlify Blobs: capturas, artefactos y resultados grandes
+```
+
+Reglas: la cola local mínima permanece para offline; secretos, tokens, cookies y datos sensibles no se guardan en Blobs sin cifrado; cada llamada lleva identidad/sesión, autorización, `operation_id` e idempotencia; los efectos Android siguen ejecutándose en el dispositivo, no en Netlify. Netlify no sustituye el Runtime ni garantiza tiempo real: se usará para sincronización, historial y control remoto, con timeouts y reintentos.
+
+Fuentes oficiales evaluadas: [Netlify Blobs](https://docs.netlify.com/build/data-and-storage/netlify-blobs/), [Netlify Database](https://docs.netlify.com/build/data-and-storage/netlify-database/), [Netlify Functions y variables](https://docs.netlify.com/build/functions/environment-variables/) y [GitHub OIDC](https://docs.github.com/actions/concepts/security/openid-connect). La integración se hará después de cerrar el Runtime local y definir autenticación.
+
 
 1. Base Android y APK.
 2. Texto flotante y sesión de instrucciones.
