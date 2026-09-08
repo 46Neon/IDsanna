@@ -30,7 +30,7 @@ class MainActivity : Activity() {
         val code = TextView(this).apply { text = "Código de sesión: ${session.activationCode()}\nVálido durante cinco minutos después de activarlo"; textSize = 16f; gravity = Gravity.CENTER; setPadding(0, 0, 0, 22) }
         val start = Button(this).apply { text = "Activar servicio"; setOnClickListener { ensurePermissionsAndStart() } }
         listenButton = Button(this).apply { text = "Escuchar instrucción"; isEnabled = false; setOnClickListener { sendServiceAction(IdsannaService.ACTION_LISTEN); status.text = "Estado: escuchando" } }
-        val stop = Button(this).apply { text = "Detener servicio"; setOnClickListener { stopService(Intent(this@MainActivity, IdsannaService::class.java)); listen.isEnabled = false; status.text = "Estado: servicio detenido" } }
+        val stop = Button(this).apply { text = "Detener servicio"; setOnClickListener { stopService(Intent(this@MainActivity, IdsannaService::class.java)); listenButton.isEnabled = false; status.text = "Estado: servicio detenido" } }
         val accessibility = Button(this).apply { text = "Configurar control autorizado"; setOnClickListener { startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) } }
         val overlay = Button(this).apply { text = "Configurar ventana flotante"; setOnClickListener { startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:$packageName"))) } }
         root.addView(title); root.addView(description); root.addView(status); root.addView(code); root.addView(start); root.addView(listenButton); root.addView(stop); root.addView(accessibility); root.addView(overlay); setContentView(root)
