@@ -56,7 +56,7 @@ class OverlayService : Service() {
         if (panel != null) return
         val input = EditText(this).apply { hint = "Escribe una instrucción para IDsanna"; setTextColor(Color.WHITE); setHintTextColor(Color.LTGRAY); setSingleLine(false); minLines = 2 }
         val taskStatus = TextView(this).apply { setTextColor(Color.WHITE); textSize = 14f; setPadding(0, 10, 0, 10); text = TaskStore(this@OverlayService).latest()?.let { taskCard(it) } ?: "No hay tareas todavía" }
-        val send = Button(this).apply { text = "Enviar"; setOnClickListener { val command = input.text.toString().trim(); if (command.isNotEmpty()) { val task = TaskStore(this@OverlayService).enqueue(command); val parsed = InstructionParser().parse(command); taskStatus.text = "Tarea creada\nID: ${task}\nEstado: creada\nIntención: ${parsed.intent}\nDestino: ${parsed.target}\nEjecución: aún no iniciada\nVerificación: pendiente\n\nInstrucción guardada:\n$command"; Toast.makeText(this@OverlayService, "Tarea guardada", Toast.LENGTH_SHORT).show(); input.text.clear() } } }
+        val send = Button(this).apply { text = "Enviar"; setOnClickListener { val command = input.text.toString().trim(); if (command.isNotEmpty()) { val store = TaskStore(this@OverlayService); val task = store.enqueue(command); val agent = AgentContract().analyze(command); store.updateStatus(task, taskStatusFor(agent.status)); taskStatus.text = agentCard(task, command, agent); Toast.makeText(this@OverlayService, "Instrucción analizada", Toast.LENGTH_SHORT).show(); input.text.clear() } } }
         val close = Button(this).apply { text = "Cerrar"; setOnClickListener { hidePanel() } }
         panel = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(18, 14, 18, 14); setBackgroundColor(Color.rgb(35, 35, 42)); addView(TextView(this@OverlayService).apply { text = "IDsanna · instrucción"; setTextColor(Color.WHITE); textSize = 16f }); addView(taskStatus); addView(input); addView(send); addView(close) }
         input.isFocusableInTouchMode = true
@@ -64,6 +64,26 @@ class OverlayService : Service() {
         windowManager.addView(panel, p)
         input.requestFocus()
         input.post { (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(input, InputMethodManager.SHOW_IMPLICIT) }
+    }
+
+    private fun taskStatusFor(status: AgentStatus): String = when (status) {
+        AgentStatus.INVALID -> "invalid"
+        AgentStatus.NEEDS_CLARIFICATION -> "needs_clarification"
+        AgentStatus.READY_FOR_APPROVAL -> "approval_required"
+        else -> "queued"
+    }
+
+    private fun agentCard(taskId: String, instruction: String, result: AgentResult): String {
+        val missing = if (result.missing.isEmpty()) "ninguno" else result.missing.joinToString(", ")
+        val tools = if (result.plan.isEmpty()) "ninguna" else result.plan.joinToString(", ") { it.tool }
+        return "Tarea analizada\nID: $taskId\nEstado: ${statusLabel(taskStatusFor(result.status))}\nIntención: ${result.intent}\nDestino: ${result.target}\nParámetros faltantes: $missing\nHerramientas propuestas: $tools\nEjecución: no iniciada\nVerificación: pendiente\n\n${resultMessage(result)}\n\nInstrucción guardada:\n$instruction"
+    }
+
+    private fun resultMessage(result: AgentResult): String = when (result.status) {
+        AgentStatus.NEEDS_CLARIFICATION -> "Se necesitan más datos antes de continuar."
+        AgentStatus.READY_FOR_APPROVAL -> "Plan listo; requiere aprobación antes de ejecutar."
+        AgentStatus.INVALID -> "La instrucción no es válida: ${result.errors.joinToString(", ")}"
+        else -> "Resultado: ${result.status}"
     }
 
     private fun taskCard(task: TaskStore.Task): String = "Tarea registrada\nID: ${task.id}\nEstado: ${statusLabel(task.status)}\nEjecución: no iniciada\nVerificación: pendiente\n\n${task.instruction}"
