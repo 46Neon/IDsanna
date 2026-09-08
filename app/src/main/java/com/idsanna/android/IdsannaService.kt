@@ -20,11 +20,36 @@ class IdsannaService : Service(), RecognitionListener, TextToSpeech.OnInitListen
     private var tts: TextToSpeech? = null
     private lateinit var voiceSession: VoiceSession
 
-    override fun onCreate() { super.onCreate(); voiceSession = VoiceSession(this); createChannel(); tts = TextToSpeech(this, this); startForeground(7, notification("Servicio activo; esperando instrucción")) }
+    override fun onCreate() {
+        super.onCreate()
+        voiceSession = VoiceSession(this)
+        createChannel()
+        tts = TextToSpeech(this, this)
+        startForeground(7, notification("Servicio activo; esperando instrucción"))
+        recoverPersistedOperations()
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) { ACTION_LISTEN -> listenOnce(); ACTION_STOP -> stopSelf() }
         return START_STICKY
     }
+
+    private fun recoverPersistedOperations() {
+        val results = RecoveryCoordinator(OperationStore(this)).recover()
+        val runtimeState = RuntimeStateStore(this)
+        RecoveryStateIntegrator(runtimeState).apply(results)
+        val snapshot = RecoveryRuntimeCoordinator(runtimeState).snapshot()
+        if (results.isEmpty() && !snapshot.hasPendingWork) return
+
+        val summary = results.groupingBy { it.decision.action }.eachCount()
+            .entries.joinToString(", ") { "${it.key.name.lowercase(Locale.ROOT)}=${it.value}" }
+        val pending = listOfNotNull(
+            snapshot.resumeCandidates.takeIf { it.isNotEmpty() }?.let { "reanudar=${it.size}" },
+            snapshot.waitingApprovals.takeIf { it.isNotEmpty() }?.let { "aprobaciones=${it.size}" }
+        ).joinToString(", ")
+        update("Recuperación revisada: $summary${if (pending.isNotEmpty()) "; $pending" else ""}")
+    }
+
     private fun createChannel() { getSystemService(NotificationManager::class.java).createNotificationChannel(NotificationChannel("idsanna", "IDsanna", NotificationManager.IMPORTANCE_LOW)) }
     private fun notification(text: String): Notification = NotificationCompat.Builder(this, "idsanna").setSmallIcon(android.R.drawable.ic_dialog_info).setContentTitle("IDsanna").setContentText(text).setOngoing(true).build()
     private fun update(text: String) { getSystemService(NotificationManager::class.java).notify(7, notification(text)) }
@@ -45,7 +70,7 @@ class IdsannaService : Service(), RecognitionListener, TextToSpeech.OnInitListen
         }
         update("Instrucción recibida"); speak("Recibí: $text")
     }
-    override fun onError(error: Int) { update("Escucha finalizada; código $error"); }
+    override fun onError(error: Int) { update("Escucha finalizada; código $error") }
     override fun onReadyForSpeech(params: Bundle?) { update("Micrófono listo") }
     override fun onBeginningOfSpeech() { update("Escuchando") }
     override fun onEndOfSpeech() { update("Procesando voz") }

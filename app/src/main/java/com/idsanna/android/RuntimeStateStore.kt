@@ -5,29 +5,58 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class RuntimeStateStore(context: Context) {
+class RuntimeStateStore(context: Context) : RecoveryStatePersistence, RecoveryStateReader {
     private val db = RuntimeDatabase(context.applicationContext).writableDatabase
 
-    fun saveCheckpoint(checkpoint: Checkpoint) {
+    override fun saveCheckpoint(checkpoint: Checkpoint) {
         val values = ContentValues().apply {
-            put("task_id", checkpoint.taskId); put("next_step_id", checkpoint.nextStepId); put("status", checkpoint.status)
+            put("task_id", checkpoint.taskId)
+            put("next_step_id", checkpoint.nextStepId)
+            put("status", checkpoint.status)
         }
         db.insertWithOnConflict("checkpoints", null, values, SQLiteDatabase.CONFLICT_REPLACE)
     }
 
-    fun getCheckpoint(taskId: String): Checkpoint? = db.rawQuery("SELECT task_id,next_step_id,status FROM checkpoints WHERE task_id = ?", arrayOf(taskId)).use { c ->
+    fun getCheckpoint(taskId: String): Checkpoint? = db.rawQuery(
+        "SELECT task_id,next_step_id,status FROM checkpoints WHERE task_id = ?",
+        arrayOf(taskId)
+    ).use { c ->
         if (c.moveToFirst()) Checkpoint(c.getString(0), c.getString(1), c.getString(2)) else null
     }
 
-    fun saveApproval(request: ApprovalRequest) {
+    override fun pendingRecoveryCheckpoints(): List<Checkpoint> = db.rawQuery(
+        "SELECT task_id,next_step_id,status FROM checkpoints WHERE status LIKE 'RECOVERY_%' ORDER BY task_id ASC",
+        null
+    ).use { c ->
+        val result = mutableListOf<Checkpoint>()
+        while (c.moveToNext()) result += Checkpoint(c.getString(0), c.getString(1), c.getString(2))
+        result
+    }
+
+    override fun saveApproval(request: ApprovalRequest) {
         val values = ContentValues().apply {
-            put("approval_id", "${request.taskId}:${request.toolName}"); put("task_id", request.taskId); put("tool_name", request.toolName); put("state", request.state.name)
+            put("approval_id", "${request.taskId}:${request.toolName}")
+            put("task_id", request.taskId)
+            put("tool_name", request.toolName)
+            put("state", request.state.name)
         }
         db.insertWithOnConflict("approvals", null, values, SQLiteDatabase.CONFLICT_REPLACE)
     }
 
-    fun getApproval(taskId: String, toolName: String): ApprovalRequest? = db.rawQuery("SELECT task_id,tool_name,state FROM approvals WHERE approval_id = ?", arrayOf("$taskId:$toolName")).use { c ->
+    fun getApproval(taskId: String, toolName: String): ApprovalRequest? = db.rawQuery(
+        "SELECT task_id,tool_name,state FROM approvals WHERE approval_id = ?",
+        arrayOf("$taskId:$toolName")
+    ).use { c ->
         if (c.moveToFirst()) ApprovalRequest(c.getString(0), c.getString(1), ApprovalState.valueOf(c.getString(2))) else null
+    }
+
+    override fun pendingRecoveryApprovals(): List<ApprovalRequest> = db.rawQuery(
+        "SELECT task_id,tool_name,state FROM approvals WHERE state = ? ORDER BY approval_id ASC",
+        arrayOf(ApprovalState.WAITING.name)
+    ).use { c ->
+        val result = mutableListOf<ApprovalRequest>()
+        while (c.moveToNext()) result += ApprovalRequest(c.getString(0), c.getString(1), ApprovalState.valueOf(c.getString(2)))
+        result
     }
 }
 
@@ -36,5 +65,5 @@ private class RuntimeDatabase(context: Context) : SQLiteOpenHelper(context, "ids
         db.execSQL("CREATE TABLE checkpoints (task_id TEXT PRIMARY KEY NOT NULL, next_step_id TEXT, status TEXT NOT NULL)")
         db.execSQL("CREATE TABLE approvals (approval_id TEXT PRIMARY KEY NOT NULL, task_id TEXT NOT NULL, tool_name TEXT NOT NULL, state TEXT NOT NULL)")
     }
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) = Unit
 }
