@@ -30,16 +30,10 @@ enum class OperationState {
     TIMED_OUT
 }
 
-/**
- * In-memory operation guard for the runtime.
- *
- * This is deliberately a small state machine. RuntimeStateStore remains the
- * durable source of truth; this class prevents duplicate execution while the
- * process is alive. A later sub-block will add a durable adapter.
- */
 class OperationControl(
     private val clock: OperationClock = SystemOperationClock,
-    private val defaultTimeoutMs: Long = DEFAULT_TIMEOUT_MS
+    private val defaultTimeoutMs: Long = DEFAULT_TIMEOUT_MS,
+    private val persistence: OperationPersistence? = null
 ) {
     private val operations = ConcurrentHashMap<String, OperationRecord>()
 
@@ -55,6 +49,10 @@ class OperationControl(
         timeoutMs: Long = defaultTimeoutMs
     ): Boolean {
         require(operationId.isNotBlank()) { "operationId must not be blank" }
+        if (operations.containsKey(operationId)) return false
+        val persisted = persistence?.get(operationId)
+        if (persisted != null) return false
+
         val now = clock.nowMillis()
         val boundedTimeout = timeoutMs.coerceIn(MIN_TIMEOUT_MS, MAX_TIMEOUT_MS)
         val record = OperationRecord(
@@ -65,10 +63,11 @@ class OperationControl(
             startedAt = now,
             timeoutAt = now + boundedTimeout
         )
-        return operations.putIfAbsent(operationId, record) == null
+        if (operations.putIfAbsent(operationId, record) != null) return false
+        persistence?.save(record)
+        return true
     }
 
-    /** True only while the operation is allowed to execute. */
     fun canExecute(operationId: String): Boolean {
         val record = operations[operationId] ?: return false
         if (record.state != OperationState.RUNNING) return false
@@ -76,26 +75,13 @@ class OperationControl(
         return operations[operationId]?.state == OperationState.RUNNING
     }
 
-    fun cancel(operationId: String): Boolean = transition(
-        operationId,
-        OperationState.RUNNING,
-        OperationState.CANCELLED,
-        "cancelled"
-    )
+    fun cancel(operationId: String): Boolean = transition(operationId, OperationState.CANCELLED, "cancelled")
 
-    fun complete(operationId: String, evidence: String? = null): Boolean = transition(
-        operationId,
-        OperationState.RUNNING,
-        OperationState.COMPLETED,
-        evidence
-    )
+    fun complete(operationId: String, evidence: String? = null): Boolean =
+        transition(operationId, OperationState.COMPLETED, evidence)
 
-    fun fail(operationId: String, evidence: String? = null): Boolean = transition(
-        operationId,
-        OperationState.RUNNING,
-        OperationState.FAILED,
-        evidence
-    )
+    fun fail(operationId: String, evidence: String? = null): Boolean =
+        transition(operationId, OperationState.FAILED, evidence)
 
     fun isExpired(operationId: String): Boolean {
         val record = operations[operationId] ?: return false
@@ -104,28 +90,28 @@ class OperationControl(
         operations.computeIfPresent(operationId) { _, current ->
             if (current.state == OperationState.RUNNING) {
                 current.copy(state = OperationState.TIMED_OUT, evidence = "timeout")
-            } else {
-                current
-            }
+            } else current
         }
+        persistCurrent(operationId)
         return operations[operationId]?.state == OperationState.TIMED_OUT
     }
 
     fun state(operationId: String): OperationState? = operations[operationId]?.state
 
-    fun record(operationId: String): OperationRecord? = operations[operationId]
+    fun record(operationId: String): OperationRecord? =
+        operations[operationId] ?: persistence?.get(operationId)
 
-    private fun transition(
-        operationId: String,
-        expected: OperationState,
-        next: OperationState,
-        evidence: String?
-    ): Boolean {
+    private fun transition(operationId: String, next: OperationState, evidence: String?): Boolean {
         val updated = operations.computeIfPresent(operationId) { _, current ->
-            if (current.state == expected) current.copy(state = next, evidence = evidence)
+            if (current.state == OperationState.RUNNING) current.copy(state = next, evidence = evidence)
             else current
         }
+        if (updated != null) persistence?.save(updated)
         return updated?.state == next
+    }
+
+    private fun persistCurrent(operationId: String) {
+        operations[operationId]?.let { persistence?.save(it) }
     }
 
     companion object {
