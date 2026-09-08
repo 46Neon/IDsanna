@@ -2,21 +2,135 @@ package com.idsanna.android
 
 import java.util.concurrent.ConcurrentHashMap
 
-class OperationControl {
-    private val operations = ConcurrentHashMap<String, OperationState>()
-
-    fun start(operationId: String, timeoutMs: Long = 30_000L): Boolean {
-        val state = operations.putIfAbsent(operationId, OperationState.RUNNING)
-        if (state != null) return false
-        operations[operationId] = OperationState.RUNNING
-        return true
-    }
-
-    fun cancel(operationId: String): Boolean = operations.replace(operationId, OperationState.RUNNING, OperationState.CANCELLED)
-    fun complete(operationId: String): Boolean = operations.replace(operationId, OperationState.RUNNING, OperationState.COMPLETED)
-    fun fail(operationId: String): Boolean = operations.replace(operationId, OperationState.RUNNING, OperationState.FAILED)
-    fun state(operationId: String): OperationState? = operations[operationId]
-    fun isTimedOut(startedAt: Long, timeoutMs: Long, now: Long = System.currentTimeMillis()): Boolean = now - startedAt >= timeoutMs.coerceIn(100L, 300_000L)
+/** Clock injectable in tests so timeout behaviour is deterministic. */
+fun interface OperationClock {
+    fun nowMillis(): Long
 }
 
-enum class OperationState { RUNNING, CANCELLED, COMPLETED, FAILED, TIMED_OUT }
+object SystemOperationClock : OperationClock {
+    override fun nowMillis(): Long = System.currentTimeMillis()
+}
+
+data class OperationRecord(
+    val operationId: String,
+    val taskId: String? = null,
+    val stepId: String? = null,
+    val toolName: String? = null,
+    val startedAt: Long,
+    val timeoutAt: Long,
+    val state: OperationState = OperationState.RUNNING,
+    val evidence: String? = null
+)
+
+enum class OperationState {
+    RUNNING,
+    CANCELLED,
+    COMPLETED,
+    FAILED,
+    TIMED_OUT
+}
+
+/**
+ * In-memory operation guard for the runtime.
+ *
+ * This is deliberately a small state machine. RuntimeStateStore remains the
+ * durable source of truth; this class prevents duplicate execution while the
+ * process is alive. A later sub-block will add a durable adapter.
+ */
+class OperationControl(
+    private val clock: OperationClock = SystemOperationClock,
+    private val defaultTimeoutMs: Long = DEFAULT_TIMEOUT_MS
+) {
+    private val operations = ConcurrentHashMap<String, OperationRecord>()
+
+    /** Backward-compatible overload for the original API. */
+    fun start(operationId: String, timeoutMs: Long): Boolean =
+        start(operationId = operationId, taskId = null, stepId = null, toolName = null, timeoutMs = timeoutMs)
+
+    fun start(
+        operationId: String,
+        taskId: String? = null,
+        stepId: String? = null,
+        toolName: String? = null,
+        timeoutMs: Long = defaultTimeoutMs
+    ): Boolean {
+        require(operationId.isNotBlank()) { "operationId must not be blank" }
+        val now = clock.nowMillis()
+        val boundedTimeout = timeoutMs.coerceIn(MIN_TIMEOUT_MS, MAX_TIMEOUT_MS)
+        val record = OperationRecord(
+            operationId = operationId,
+            taskId = taskId,
+            stepId = stepId,
+            toolName = toolName,
+            startedAt = now,
+            timeoutAt = now + boundedTimeout
+        )
+        return operations.putIfAbsent(operationId, record) == null
+    }
+
+    /** True only while the operation is allowed to execute. */
+    fun canExecute(operationId: String): Boolean {
+        val record = operations[operationId] ?: return false
+        if (record.state != OperationState.RUNNING) return false
+        if (isExpired(operationId)) return false
+        return operations[operationId]?.state == OperationState.RUNNING
+    }
+
+    fun cancel(operationId: String): Boolean = transition(
+        operationId,
+        OperationState.RUNNING,
+        OperationState.CANCELLED,
+        "cancelled"
+    )
+
+    fun complete(operationId: String, evidence: String? = null): Boolean = transition(
+        operationId,
+        OperationState.RUNNING,
+        OperationState.COMPLETED,
+        evidence
+    )
+
+    fun fail(operationId: String, evidence: String? = null): Boolean = transition(
+        operationId,
+        OperationState.RUNNING,
+        OperationState.FAILED,
+        evidence
+    )
+
+    fun isExpired(operationId: String): Boolean {
+        val record = operations[operationId] ?: return false
+        if (record.state != OperationState.RUNNING) return false
+        if (clock.nowMillis() < record.timeoutAt) return false
+        operations.computeIfPresent(operationId) { _, current ->
+            if (current.state == OperationState.RUNNING) {
+                current.copy(state = OperationState.TIMED_OUT, evidence = "timeout")
+            } else {
+                current
+            }
+        }
+        return operations[operationId]?.state == OperationState.TIMED_OUT
+    }
+
+    fun state(operationId: String): OperationState? = operations[operationId]?.state
+
+    fun record(operationId: String): OperationRecord? = operations[operationId]
+
+    private fun transition(
+        operationId: String,
+        expected: OperationState,
+        next: OperationState,
+        evidence: String?
+    ): Boolean {
+        val updated = operations.computeIfPresent(operationId) { _, current ->
+            if (current.state == expected) current.copy(state = next, evidence = evidence)
+            else current
+        }
+        return updated?.state == next
+    }
+
+    companion object {
+        const val DEFAULT_TIMEOUT_MS = 30_000L
+        const val MIN_TIMEOUT_MS = 100L
+        const val MAX_TIMEOUT_MS = 300_000L
+    }
+}
