@@ -47,6 +47,31 @@ No se crearán ramas de IDsanna para cada repositorio externo. Una rama solo sep
 
 La integración se hará mediante módulos propios, dependencias fijadas, adaptadores o ports selectivos. Solo se considerará un fork cuando exista una necesidad técnica concreta, licencia compatible, mantenimiento asumible, pruebas reproducibles y un plan claro de sincronización. Los repositorios de terceros se mantendrán fuera de la APK hasta superar la auditoría.
 
+## Arquitectura consolidada por comparación de repositorios
+
+La comparación de OpenClaw, OpenCode, Hermes Agent, LangGraph, Temporal, PydanticAI, AutoGen, OpenHands, SWE-ReX, Browser Use, Stagehand, AndroidWorld, Appium, Maestro, UiAutomator2, scrcpy, DroidPilot, Mobilerun y otros proyectos confirma cinco planos separados:
+
+1. Ingress/control: burbuja, API, Netlify, sesiones y disparadores.
+2. Agent/planning: LLM, parser, planner y grafo de estados.
+3. Policy/tool routing: registro, schemas, autorización, aprobación y adaptadores.
+4. Execution: Android, Accessibility, UIAutomator, ADB, browser, Termux y PC.
+5. Durability/observability: checkpoints, eventos, auditoría, recuperación y verificación.
+
+Requisitos obligatorios incorporados al plan:
+
+- Eventos tipados separados del chat: `ToolRequested`, `ApprovalRequired`, `ToolStarted`, `ToolCompleted`, `RetryScheduled`, `CancellationRequested`, `CheckpointWritten`, `VerificationFailed` y estados terminales.
+- Reintentos independientes para modelo, herramienta, sesión y workflow; cada uno con máximo de intentos, tiempo, backoff, jitter y circuit breaker.
+- Cancelación propagada al modelo, herramienta, proceso hijo, navegador, subagentes y estado persistente.
+- `operation_id` e idempotencia antes de reintentar o reanudar efectos externos.
+- Aprobación sensible basada en herramienta, argumentos, recurso, identidad, sesión, riesgo y contexto; no solo en el nombre de la herramienta.
+- Verificación externa de postcondiciones; una segunda respuesta del LLM no cuenta como evidencia independiente.
+- ToolRouter y Runtime separados del Planner; el modelo nunca recibe autoridad de ejecución directa.
+- Adaptadores Android por aplicación/versión, con permisos, fallos conocidos, fallback, criterio de parada y verificación.
+- El primer Runtime será simulado; después se habilitarán herramientas de lectura y solo luego acciones mutantes.
+- La etiqueta “controlar cualquier app” solo se aceptará con evidencia por API, dispositivo, app y acción; de lo contrario será `unproven`.
+
+Fallos recurrentes encontrados y prevención: reintentos infinitos, replay duplicado de efectos, cancelación que corrompe sesiones, sandbox sin política suficiente, procesos huérfanos, self-healing sin límites, logs/memoria sin cota, aprobación no persistente, y estado de UI obsoleto. Estos casos serán pruebas negativas obligatorias.
+
 ## Resultados de investigación Android 11
 
 La comparación de proyectos y issues de Android confirma que no existe un canal universal de control. IDsanna deberá medir capacidades reales antes de cada tarea: versión/OEM, AccessibilityService, Usage Access, overlay, batería, MediaProjection, root/Shizuku y conectividad.
