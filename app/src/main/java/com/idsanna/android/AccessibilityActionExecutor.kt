@@ -28,7 +28,10 @@ class AccessibilityActionExecutor(private val service: AccessibilityService) {
     fun scrollToText(text: String): ActionResult {
         val node = findNode { it.text?.toString() == text }
             ?: return ActionResult(false, "scroll_target_not_found")
-        val accepted = node.performAction(AccessibilityNodeInfo.ACTION_SHOW_ON_SCREEN)
+        var parent = node.parent
+        while (parent != null && !parent.isScrollable) parent = parent.parent
+        val scrollContainer = parent ?: return ActionResult(false, "scroll_container_not_found")
+        val accepted = scrollContainer.performAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
         return ActionResult(accepted, if (accepted) "scroll_to_text_requested" else "scroll_to_text_rejected")
     }
 
